@@ -253,6 +253,6 @@ export function checkForSupported(pidvalue, value) {
       supportedPids.push(PIDS[i]);
     }
   }
-  // console.log(supportedPids);
+
   return supportedPids;
 }

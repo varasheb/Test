@@ -20,8 +20,8 @@ window.onload = () => {
     let existingRow = document.getElementById(parsedData.id);
 
     if (existingRow) {
-      existingRow.querySelector(".timestamp-cell").textContent =
-        parsedData.timeStamp;
+      //   existingRow.querySelector(".timestamp-cell").textContent =
+      //     parsedData.timeStamp;
       existingRow.querySelector(".name-cell").textContent = parsedData.name;
       existingRow.querySelector(".value-cell").textContent = parsedData.value;
     } else {
@@ -31,9 +31,9 @@ window.onload = () => {
       const idCell = document.createElement("td");
       idCell.textContent = parsedData.id;
 
-      const unitCell = document.createElement("td");
-      unitCell.textContent = parsedData.timeStamp;
-      unitCell.classList.add("timestamp-cell");
+      //   const unitCell = document.createElement("td");
+      //   unitCell.textContent = parsedData.timeStamp;
+      //   unitCell.classList.add("timestamp-cell");
 
       const nameCell = document.createElement("td");
       nameCell.textContent = parsedData.name;
@@ -44,7 +44,7 @@ window.onload = () => {
       valueCell.classList.add("value-cell");
 
       row.appendChild(idCell);
-      row.appendChild(unitCell);
+      //   row.appendChild(unitCell);
       row.appendChild(nameCell);
       row.appendChild(valueCell);
 

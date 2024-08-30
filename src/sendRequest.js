@@ -13,14 +13,13 @@ export function sendCanRequest(canId, data) {
       console.error(`stderr: ${stderr}`);
       return;
     }
-    console.log(`stdout: ${stdout}`);
   });
 }
 
 export function sendRequestForSupportedPIds(pids) {
   setInterval(() => {
-    for (let i = 0; i < pids.length; i++) {
+    for (let i = 0; i < pids.length - 2; i++) {
       sendCanRequest("7DF", `0201${pids[i]["id"]}0000000000`);
     }
-  }, 3000);
+  }, 1000);
 }
