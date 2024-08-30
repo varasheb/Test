@@ -14,10 +14,14 @@ export function decodeFrame(data) {
     const decodedata = new DataHexDecoder();
     switch (pid) {
       case "00":
-        const supportedPids = checkForSupported(hexdata);
+        const supportedPids = checkForSupported("00", hexdata);
         sendRequestForSupportedPIds(supportedPids);
         console.log("------>", supportedPids);
-        break;
+        return {
+          id: "00",
+          name: "Monitor status since DTCs Cleared",
+          value: decodedata.supported_pids_00(hexdata),
+        };
 
       case "01":
         return {
@@ -197,8 +201,14 @@ export function decodeFrame(data) {
           value: decodedata.cal_run_time_engine_start(hexdata),
         };
 
-      //====================================================================================================================================//   21 -40
-
+      case "20":
+        const supportedPid20 = checkForSupported("20", hexdata);
+        sendRequestForSupportedPIds(supportedPid20);
+        return {
+          id: "00",
+          name: "Monitor status since DTCs Cleared",
+          value: decodedata.supported_pids_20(hexdata),
+        };
       case "21":
         return {
           id: "21",
@@ -414,7 +424,15 @@ export function decodeFrame(data) {
           name: "Catalyst Temperature: Bank 2, Sensor 2",
           value: decodedata.calculate_catalyst_temperature(hexdata),
         };
-      //==============================================================================================// PID 41 TO 60
+      case "40":
+        const supportedPids40 = checkForSupported("40", hexdata);
+        sendRequestForSupportedPIds(supportedPids40);
+        console.log("------>", supportedPids40);
+        return {
+          id: "40",
+          name: "Monitor status since DTCs Cleared",
+          value: decodedata.supported_pids_40(hexdata),
+        };
 
       case "41":
         return {
@@ -633,7 +651,14 @@ export function decodeFrame(data) {
           value: decodedata.calEmissionRequirements(hexdata),
         };
 
-      //==============================================================================================================================///   PID 61 -7F OR 80
+      case "60":
+        const supportedPids60 = checkForSupported("60", hexdata);
+        sendRequestForSupportedPIds(supportedPids60);
+        return {
+          id: "60",
+          name: "Monitor status since DTCs Cleared",
+          value: decodedata.supported_pids_60(hexdata),
+        };
 
       case "61":
         return {
@@ -697,7 +722,14 @@ export function decodeFrame(data) {
           value: decodedata.diesel_particulate_filter_temperture(hexdata),
         };
 
-      //==============================================================================================================================///   PID 81 -7F OR C8
+      case "80":
+        const supportedPids80 = checkForSupported("80", hexdata);
+        sendRequestForSupportedPIds(supportedPids80);
+        return {
+          id: "80",
+          name: "Monitor status since DTCs Cleared",
+          value: decodedata.supported_pids_80(hexdata),
+        };
 
       case "8D":
         return {

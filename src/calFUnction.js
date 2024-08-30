@@ -8,6 +8,56 @@ export class DataHexDecoder {
     return encodedResult;
   }
 
+  supported_pids_00(hexdata) {
+    let hexA = hexdata.slice(0, 8);
+    let A = parseInt(hexA, 16);
+    let result = 1 * A;
+    let encodedResult = `${result} ENCODED`;
+    console.log("monitor_status_since_DTCs_cleared", encodedResult);
+    return encodedResult;
+  }
+  supported_pids_20(hexdata) {
+    let hexA = hexdata.slice(0, 8);
+    let A = parseInt(hexA, 16);
+    let result = 1 * A;
+    let encodedResult = `${result} ENCODED`;
+    console.log("monitor_status_since_DTCs_cleared", encodedResult);
+    return encodedResult;
+  }
+  supported_pids_40(hexdata) {
+    let hexA = hexdata.slice(0, 8);
+    let A = parseInt(hexA, 16);
+    let result = 1 * A;
+    let encodedResult = `${result} ENCODED`;
+    console.log("monitor_status_since_DTCs_cleared", encodedResult);
+    return encodedResult;
+  }
+  supported_pids_60(hexdata) {
+    let hexA = hexdata.slice(0, 8);
+    let A = parseInt(hexA, 16);
+    let result = 1 * A;
+    let encodedResult = `${result} ENCODED`;
+    console.log("monitor_status_since_DTCs_cleared", encodedResult);
+    return encodedResult;
+  }
+
+  supported_pids_80(hexdata) {
+    let hexA = hexdata.slice(0, 8);
+    let A = parseInt(hexA, 16);
+    let result = 1 * A;
+    let encodedResult = `${result} ENCODED`;
+    console.log("monitor_status_since_DTCs_cleared", encodedResult);
+    return encodedResult;
+  }
+  supported_pids_A0(hexdata) {
+    let hexA = hexdata.slice(0, 8);
+    let A = parseInt(hexA, 16);
+    let result = 1 * A;
+    let encodedResult = `${result} ENCODED`;
+    console.log("monitor_status_since_DTCs_cleared", encodedResult);
+    return encodedResult;
+  }
+
   freez_dtc(hexdata) {
     let hexA = hexdata.slice(0, 4);
     let A = parseInt(hexA, 16);

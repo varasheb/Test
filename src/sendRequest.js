@@ -1,7 +1,7 @@
-import { spawn, exec } from 'child_process';
+import { spawn, exec } from "child_process";
 
-function sendCanRequest(canId, data) {
-  const canInterface = 'can0';
+export function sendCanRequest(canId, data) {
+  const canInterface = "can0";
   const command = `cansend ${canInterface} ${canId}#${data}`;
 
   exec(command, (error, stdout, stderr) => {
@@ -20,7 +20,7 @@ function sendCanRequest(canId, data) {
 export function sendRequestForSupportedPIds(pids) {
   setInterval(() => {
     for (let i = 0; i < pids.length; i++) {
-      sendCanRequest('7DF', `0201${pids[i]['id']}00000000`);
+      sendCanRequest("7DF", `0201${pids[i]["id"]}0000000000`);
     }
   }, 3000);
 }
