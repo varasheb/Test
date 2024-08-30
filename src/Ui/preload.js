@@ -6,13 +6,27 @@
  *
  * https://www.electronjs.org/docs/latest/tutorial/sandbox
  */
-window.addEventListener('DOMContentLoaded', () => {
-  const replaceText = (selector, text) => {
-    const element = document.getElementById(selector)
-    if (element) element.innerText = text
-  }
+// const { contextBridge, ipcRenderer } = require("electron");
 
-  for (const type of ['chrome', 'node', 'electron']) {
-    replaceText(`${type}-version`, process.versions[type])
-  }
-})
+// contextBridge.exposeInMainWorld("ipcRenderer", ipcRenderer);
+
+// window.addEventListener("DOMContentLoaded", () => {
+//   const replaceText = (selector, text) => {
+//     const element = document.getElementById(selector);
+//     if (element) element.innerText = text;
+//   };
+
+//   for (const type of ["chrome", "node", "electron"]) {
+//     replaceText(`${type}-version`, process.versions[type]);
+//   }
+// });
+const { contextBridge, ipcRenderer } = require("electron");
+
+contextBridge.exposeInMainWorld("electron", {
+  sendPID: (pid) => {
+    ipcRenderer.send("send-pid", pid);
+  },
+  onLoginResponse: (callback) => {
+    ipcRenderer.on("login-response", (event, response) => callback(response));
+  },
+});

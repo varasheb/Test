@@ -1,25 +1,25 @@
-import { spawn } from 'child_process';
+import { spawn } from "child_process";
 
 export function setupCAN() {
-  const canChannel = 'can0';
-  const bitrate = '500000';
+  const canChannel = "can0";
+  const bitrate = "500000";
 
-  const linkSetUp = spawn('ip', [
-    'link',
-    'set',
+  const linkSetUp = spawn("ip", [
+    "link",
+    "set",
     canChannel,
-    'up',
-    'type',
-    'can',
-    'bitrate',
-    bitrate
+    "up",
+    "type",
+    "can",
+    "bitrate",
+    bitrate,
   ]);
 
-  linkSetUp.stderr.on('data', (data) => {
+  linkSetUp.stderr.on("data", (data) => {
     console.error(`Error setting up CAN interface: ${data}`);
   });
 
-  linkSetUp.on('close', (code) => {
+  linkSetUp.on("close", (code) => {
     if (code === 0) {
       console.log(`Successfully set up ${canChannel} with bitrate ${bitrate}`);
     } else {
