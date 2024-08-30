@@ -108,10 +108,14 @@ const candump = spawn("candump", [canChannel]);
 
 candump.stdout.on("data", (data) => {
   const decodedResult = decodeFrame(data.toString()); // Decode CAN data
+  const timeStamp = new Date().toISOString();
   console.log(`CAN message: ${data.toString()}`);
   if (decodedResult) console.log("------------------", decodedResult);
   if (mainWindow) {
-    mainWindow.webContents.send("can-data", decodedResult);
+    mainWindow.webContents.send("can-data", {
+      timeStamp,
+      ...decodedResult,
+    });
   }
 });
 
