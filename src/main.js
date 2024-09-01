@@ -5,6 +5,7 @@ import { fileURLToPath } from "node:url";
 import { spawn } from "child_process";
 import { decodeFrame } from "./decodeframe.js";
 import { sendCanRequest } from "./sendRequest.js";
+import { HexConverter } from "./decodeRawFrame.js";
 
 const __dirname = dirname(fileURLToPath(import.meta.url));
 let mainWindow;
@@ -33,32 +34,24 @@ app.on("activate", () => {
     createWindow();
   }
 });
+//===============================================================
 
 ipcMain.on("send-pid", (event, pid) => {
   console.log(`Received PID: ${pid}`);
   sendCanRequest("7DF", `0201${pid}0000000000`);
 });
 
-ipcMain.on("start-cycle", (event, pid, cycleTime) => {
-  console.log(
-    `Starting cycle with PID: ${pid} and Cycle Time: ${cycleTime} ms`
-  );
-
-  clearInterval(cycleInterval);
-
-  cycleInterval = setInterval(() => {
-    sendCanRequest("7DF", `0201${pid}0000000000`);
-  }, cycleTime);
-});
-
-ipcMain.on("stop-cycle", () => {
-  console.log("Stopping cycle");
-  clearInterval(cycleInterval);
+ipcMain.on("send-raw-can-data", (event, rawData) => {
+  const hexdata = rawData.data.join("");
+  if (parseInt(rawData.cyclicTime) >= 1000)
+    cycleInterval = setInterval(() => {
+      sendCanRequest(rawData.id, hexdata);
+    }, rawData.cyclicTime);
 });
 
 //======================================================
 
-const canChannel = "can0";
+const canChannel = "vcan0";
 const candump = spawn("candump", [canChannel]);
 
 candump.stdout.on("data", (data) => {
@@ -70,6 +63,7 @@ candump.stdout.on("data", (data) => {
       mainWindow.webContents.send("can-data", {
         timeStamp,
         ...decodedResult,
+        rawData: data.toString(),
       });
     }
   }

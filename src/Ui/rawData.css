@@ -1,6 +1,10 @@
 * {
   margin: 0px;
   padding: 0px;
+  input {
+    font-size: 17px;
+    padding-left: 3px;
+  }
 }
 
 .rawdata-main-cnt {
@@ -14,7 +18,7 @@
   padding-top: 20px;
   /* padding-left: 30px; */
   width: 100%;
-  height: 40%;
+  height: 35%;
   display: flex;
   flex-direction: column;
   gap: 10px;
@@ -41,7 +45,7 @@
 
 .rawdata-receive-main-cnt {
   width: 100%;
-  height: 60%;
+  height: 65%;
   /* border: 2px solid black; */
   box-sizing: border-box;
   display: flex;
@@ -53,8 +57,11 @@
   height: 100%;
   display: flex;
   justify-content: flex-start;
-  align-items: center;
+  /* align-items: center; */
   border: 1px solid rgb(82, 80, 80);
+  table {
+    width: 100%;
+  }
 }
 .rawdata-inp-main-inner-cnt {
   margin-left: 40px;
@@ -91,7 +98,28 @@
   }
 }
 
+.rawdata-btn-main-cnt {
+  display: flex;
+}
+
 #rawdata-inp-btn1 {
+  width: 170px;
+  height: 45px;
+  background-color: #bef5c0;
+  color: black;
+  border: 3px solid black;
+  border-radius: 5px;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+
+  p {
+    font-weight: 600;
+    font-size: 15px;
+  }
+}
+
+#rawdata-btn2 {
   width: 170px;
   height: 45px;
   background-color: #bef5c0;
@@ -187,4 +215,201 @@ tr {
 
 #rawdata-receive-id-cnt {
   width: 15%;
+}
+
+.rawdata-user-popup-main-cnt {
+  width: 100%;
+  height: 100vh;
+  position: absolute;
+  top: 0px;
+  left: 0px;
+  background-color: rgba(0, 0, 0, 0.3);
+  display: flex;
+  justify-content: center;
+  align-items: center;
+  visibility: hidden;
+  z-index: 1000;
+}
+
+.rawdata-user-popup-main-inner-cnt {
+  width: 35%;
+  height: 280px;
+  background-color: white;
+  border: 4px solid black;
+  border-radius: 10px;
+  padding: 20px;
+  display: flex;
+  flex-direction: column;
+}
+
+/* Hide the popup by default */
+/* .rawdata-user-popup-main-cnt {
+    display: none;
+    position: fixed;
+    top: 0;
+    left: 0;
+    width: 100%;
+    height: 100%; */
+/* background: rgba(0, 0, 0, 0.5); Semi-transparent background */
+/* justify-content: center;
+    align-items: center;
+}
+
+.rawdata-user-popup-main-inner-cnt {
+    background: #fff;
+    padding: 20px;
+    border-radius: 5px;
+    max-width: 500px;
+    margin: 0 auto;
+} */
+
+.rawdata-pop-btn-cnt {
+  width: 100%;
+  display: flex;
+  justify-content: center;
+  align-items: center;
+}
+
+.rawdata-inp-inner-data-cnt {
+  width: 100%;
+  display: flex;
+  gap: 20px;
+}
+.rawdata-inp-data-cnt {
+  display: flex;
+  flex-direction: column;
+  select {
+    width: 50px;
+    height: 25px;
+  }
+}
+
+.rawdata-inp1-data-cnt {
+  /* width: 10%; */
+  display: flex;
+  flex-direction: column;
+  input {
+    width: 80px;
+    height: 25px;
+  }
+}
+
+.rawdata-inp3-data-cnt {
+  display: flex;
+  flex-direction: column;
+}
+
+.rawdata-inp3-data-inner-cnt {
+  display: flex;
+  gap: 10px;
+}
+
+.rawdata-inp3-data-inner-txt-cnt {
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  gap: 5px;
+  input {
+    width: 25px;
+    font-size: 17px;
+  }
+}
+
+.rawdata-inp-inner-cycle-cnt {
+  display: flex;
+  flex-direction: column;
+  justify-content: flex-start;
+  gap: 5px;
+
+  .rawdata-inp-inner-cycle-inner-cnt {
+    display: flex;
+    align-items: center;
+    gap: 10px;
+    input {
+      width: 100px;
+      height: 25px;
+    }
+  }
+}
+
+.rawdata-inp-inner-count-cnt {
+  display: flex;
+  flex-direction: column;
+  gap: 5px;
+  input {
+    width: 100px;
+    height: 25px;
+  }
+}
+/* ------------------------------- */
+/* Ensure the table takes full width */
+table {
+  width: 100%;
+  border-collapse: collapse; /* Collapses borders to avoid double borders */
+}
+
+/* Table header styling */
+thead th {
+  background-color: #4caf50; /* Background color for the header */
+  color: white; /* Text color for the header */
+  padding: 12px; /* Padding inside header cells */
+  text-align: left; /* Align text to the left */
+  border-bottom: 2px solid #ddd; /* Bottom border for header cells */
+}
+
+/* Table body styling */
+tbody {
+  display: block; /* Allows setting height and scroll behavior */
+  max-height: 400px; /* Adjust based on your needs */
+  overflow-y: auto; /* Enables vertical scrolling if content exceeds max-height */
+}
+
+/* Table rows */
+tbody tr {
+  display: table; /* Ensures rows are displayed correctly */
+  width: 100%; /* Ensures rows take full width of the table */
+  box-sizing: border-box; /* Includes padding and border in element's total width and height */
+}
+
+/* Table cells in the body */
+tbody td {
+  padding: 12px; /* Padding inside cells */
+  text-align: left; /* Align text to the left */
+  border-bottom: 1px solid #ddd; /* Bottom border for cells */
+}
+
+/* Align cells in the body with header columns */
+thead th:nth-child(1),
+tbody td:nth-child(1) {
+  width: 12%; /* Adjust based on your needs */
+}
+
+thead th:nth-child(2),
+tbody td:nth-child(2) {
+  width: 15%; /* Adjust based on your needs */
+}
+
+thead th:nth-child(3),
+tbody td:nth-child(3) {
+  width: 8%; /* Adjust based on your needs */
+}
+
+thead th:nth-child(4),
+tbody td:nth-child(4) {
+  width: 15%; /* Adjust based on your needs */
+}
+
+thead th:nth-child(5),
+tbody td:nth-child(5) {
+  width: 50%; /* Adjust based on your needs */
+}
+
+/* Optional: Alternate row colors for better readability */
+tbody tr:nth-child(even) {
+  background-color: #f1f1f1; /* Alternate row colors */
+}
+
+/* Optional: Improve vertical alignment of text */
+tbody td {
+  vertical-align: middle; /* Align text vertically in the center of cells */
 }

@@ -1,7 +1,8 @@
 import { spawn, exec } from "child_process";
 
 export function sendCanRequest(canId, data) {
-  const canInterface = "can0";
+  // const canInterface = "can0";
+  const canInterface = "vcan0";
   const command = `cansend ${canInterface} ${canId}#${data}`;
 
   exec(command, (error, stdout, stderr) => {

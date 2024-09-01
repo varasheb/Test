@@ -14,9 +14,6 @@ export function decodeFrame(data) {
     const decodedata = new DataHexDecoder();
     switch (pid) {
       case "00":
-        const supportedPids = checkForSupported("00", hexdata);
-        sendRequestForSupportedPIds(supportedPids);
-        console.log("------>", supportedPids);
         return {
           id: "00",
           name: "Monitor status since DTCs Cleared",
@@ -202,8 +199,6 @@ export function decodeFrame(data) {
         };
 
       case "20":
-        const supportedPid20 = checkForSupported("20", hexdata);
-        sendRequestForSupportedPIds(supportedPid20);
         return {
           id: "00",
           name: "Monitor status since DTCs Cleared",
@@ -425,9 +420,6 @@ export function decodeFrame(data) {
           value: decodedata.calculate_catalyst_temperature(hexdata),
         };
       case "40":
-        const supportedPids40 = checkForSupported("40", hexdata);
-        sendRequestForSupportedPIds(supportedPids40);
-        console.log("------>", supportedPids40);
         return {
           id: "40",
           name: "Monitor status since DTCs Cleared",
@@ -652,8 +644,6 @@ export function decodeFrame(data) {
         };
 
       case "60":
-        const supportedPids60 = checkForSupported("60", hexdata);
-        sendRequestForSupportedPIds(supportedPids60);
         return {
           id: "60",
           name: "Monitor status since DTCs Cleared",
@@ -723,8 +713,6 @@ export function decodeFrame(data) {
         };
 
       case "80":
-        const supportedPids80 = checkForSupported("80", hexdata);
-        sendRequestForSupportedPIds(supportedPids80);
         return {
           id: "80",
           name: "Monitor status since DTCs Cleared",

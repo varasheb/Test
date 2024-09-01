@@ -10,11 +10,18 @@
   <body>
     <div class="rawdata-main-cnt">
       <div class="rawdata-transfer-main-cnt">
-        <button id="rawdata-btn1" style="margin-left: 30px">
-          <a href="index.html" style="text-decoration: none">
-            <p style="color: black">Home</p>
-          </a>
-        </button>
+        <div class="rawdata-btn-main-cnt">
+          <button id="rawdata-btn1" style="margin-left: 30px">
+            <a href="index.html" style="text-decoration: none">
+              <p style="color: black">Home</p>
+            </a>
+          </button>
+          <button id="rawdata-btn2" style="margin-left: 30px">
+            <a href="#" style="text-decoration: none">
+              <p style="color: black">Add Request</p>
+            </a>
+          </button>
+        </div>
         <div class="rawdata-transfer-inp-main-cnt">
           <div class="rawdata-transfer-txt-main-cnt">
             <div class="rawdata-transfer-txt-inner-main-cnt">
@@ -29,364 +36,18 @@
             </div>
           </div>
           <div class="rawdata-inp-main-cnt">
-            <div class="rawdata-inp-main-inner-cnt">
-              <div class="rawdata-select-main-cnt">
-                <div class="rawdata-inp-txt-cnt">
-                  <span>PIDs </span>
-                </div>
-                <select id="pids-select">
-                  <!-- PIDs 00 - 20 -->
-                  <option value="00">00 - PIDs supported [01 - 20]</option>
-                  <option value="01">
-                    01 - Monitor status since DTCs cleared
-                  </option>
-                  <option value="02">02 - Freeze DTC</option>
-                  <option value="03">03 - Fuel system status</option>
-                  <option value="04">04 - Calculated engine load</option>
-                  <option value="05">05 - Engine coolant temperature</option>
-                  <option value="06">06 - Short term fuel trim (bank 1)</option>
-                  <option value="07">07 - Long term fuel trim (bank 1)</option>
-                  <option value="08">08 - Short term fuel trim (bank 2)</option>
-                  <option value="09">09 - Long term fuel trim (bank 2)</option>
-                  <option value="0A">
-                    0A - Fuel pressure (gauge pressure)
-                  </option>
-                  <option value="0B">
-                    0B - Intake manifold absolute pressure
-                  </option>
-                  <option value="0C">0C - Engine speed</option>
-                  <option value="0D">0D - Vehicle speed</option>
-                  <option value="0E">0E - Timing advance</option>
-                  <option value="0F">0F - Intake air temperature</option>
-                  <option value="10">
-                    10 - Mass air flow sensor air flow rate
-                  </option>
-                  <option value="11">11 - Throttle position</option>
-                  <option value="12">
-                    12 - Commanded secondary air status
-                  </option>
-                  <option value="13">
-                    13 - Oxygen sensors present (2 banks)
-                  </option>
-                  <option value="14">14 - Oxygen sensor 1 (voltage)</option>
-                  <option value="15">15 - Oxygen sensor 2 (voltage)</option>
-                  <option value="16">16 - Oxygen sensor 3 (voltage)</option>
-                  <option value="17">17 - Oxygen sensor 4 (voltage)</option>
-                  <option value="18">18 - Oxygen sensor 5 (voltage)</option>
-                  <option value="19">19 - Oxygen sensor 6 (voltage)</option>
-                  <option value="1A">1A - Oxygen sensor 7 (voltage)</option>
-                  <option value="1B">1B - Oxygen sensor 8 (voltage)</option>
-                  <option value="1C">
-                    1C - OBD standards the vehicle conforms to
-                  </option>
-                  <option value="1D">
-                    1D - Oxygen sensors present (4 banks)
-                  </option>
-                  <option value="1E">1E - Auxiliary input status</option>
-                  <option value="1F">1F - Run time since engine start</option>
-                  <option value="20">20 - PIDs supported [21 - 40]</option>
-
-                  <!-- PIDs 21 - 40 -->
-                  <option value="21">21 - Distance traveled with MIL on</option>
-                  <option value="22">
-                    22 - Fuel rail pressure (relative to manifold vacuum)
-                  </option>
-                  <option value="23">
-                    23 - Fuel rail gauge pressure (diesel, gas inject)
-                  </option>
-                  <option value="24">
-                    24 - Oxygen sensor 1 (air-fuel equivalence ratio)
-                  </option>
-                  <option value="25">
-                    25 - Oxygen sensor 2 (air-fuel equivalence ratio)
-                  </option>
-                  <option value="26">
-                    26 - Oxygen sensor 3 (air-fuel equivalence ratio)
-                  </option>
-                  <option value="27">
-                    27 - Oxygen sensor 4 (air-fuel equivalence ratio)
-                  </option>
-                  <option value="28">
-                    28 - Oxygen sensor 5 (air-fuel equivalence ratio)
-                  </option>
-                  <option value="29">
-                    29 - Oxygen sensor 6 (air-fuel equivalence ratio)
-                  </option>
-                  <option value="2A">
-                    2A - Oxygen sensor 7 (air-fuel equivalence ratio)
-                  </option>
-                  <option value="2B">
-                    2B - Oxygen sensor 8 (air-fuel equivalence ratio)
-                  </option>
-                  <option value="2C">2C - Commanded EGR</option>
-                  <option value="2D">2D - EGR Error</option>
-                  <option value="2E">2E - Commanded evaporative purge</option>
-                  <option value="2F">2F - Fuel tank level input</option>
-                  <option value="30">30 - Warmups since DTCs cleared</option>
-                  <option value="31">
-                    31 - Distance traveled since DTCs cleared
-                  </option>
-                  <option value="32">
-                    32 - Evaporative system vapor pressure
-                  </option>
-                  <option value="33">33 - Absolute barometric pressure</option>
-                  <option value="34">
-                    34 - Oxygen sensor 1 (air-fuel equivalence ratio)
-                  </option>
-                  <option value="35">
-                    35 - Oxygen sensor 2 (air-fuel equivalence ratio)
-                  </option>
-                  <option value="36">
-                    36 - Oxygen sensor 3 (air-fuel equivalence ratio)
-                  </option>
-                  <option value="37">
-                    37 - Oxygen sensor 4 (air-fuel equivalence ratio)
-                  </option>
-                  <option value="38">
-                    38 - Oxygen sensor 5 (air-fuel equivalence ratio)
-                  </option>
-                  <option value="39">
-                    39 - Oxygen sensor 6 (air-fuel equivalence ratio)
-                  </option>
-                  <option value="3A">
-                    3A - Oxygen sensor 7 (air-fuel equivalence ratio)
-                  </option>
-                  <option value="3B">
-                    3B - Oxygen sensor 8 (air-fuel equivalence ratio)
-                  </option>
-                  <option value="3C">
-                    3C - Catalyst temperature (bank 1, sensor 1)
-                  </option>
-                  <option value="3D">
-                    3D - Catalyst temperature (bank 2, sensor 1)
-                  </option>
-                  <option value="3E">
-                    3E - Catalyst temperature (bank 1, sensor 2)
-                  </option>
-                  <option value="3F">
-                    3F - Catalyst temperature (bank 2, sensor 2)
-                  </option>
-                  <option value="40">40 - PIDs supported [41 - 60]</option>
-
-                  <!-- PIDs 41 - 60 -->
-                  <option value="41">
-                    41 - Monitor status this drive cycle
-                  </option>
-                  <option value="42">42 - Control module voltage</option>
-                  <option value="43">43 - Absolute load value</option>
-                  <option value="44">
-                    44 - Commanded air-fuel equivalence ratio
-                  </option>
-                  <option value="45">45 - Relative throttle position</option>
-                  <option value="46">46 - Ambient air temperature</option>
-                  <option value="47">47 - Absolute throttle position B</option>
-                  <option value="48">48 - Absolute throttle position C</option>
-                  <option value="49">49 - Accelerator pedal position D</option>
-                  <option value="4A">4A - Accelerator pedal position E</option>
-                  <option value="4B">4B - Accelerator pedal position F</option>
-                  <option value="4C">4C - Commanded throttle actuator</option>
-                  <option value="4D">4D - Time run with MIL on</option>
-                  <option value="4E">4E - Time since DTCs cleared</option>
-                  <option value="4F">
-                    4F - Max fuel-air equivalence ratio
-                  </option>
-                  <option value="50">
-                    50 - Max air flow rate from MAF sensor
-                  </option>
-                  <option value="51">51 - Fuel type</option>
-                  <option value="52">52 - Ethanol fuel percentage</option>
-                  <option value="53">
-                    53 - Absolute evap system vapor pressure
-                  </option>
-                  <option value="54">54 - Evap system vapor pressure</option>
-                  <option value="55">
-                    55 - Short term secondary oxygen trim (bank 1)
-                  </option>
-                  <option value="56">
-                    56 - Long term secondary oxygen trim (bank 1)
-                  </option>
-                  <option value="57">
-                    57 - Short term secondary oxygen trim (bank 2)
-                  </option>
-                  <option value="58">
-                    58 - Long term secondary oxygen trim (bank 2)
-                  </option>
-                  <option value="59">59 - Fuel rail absolute pressure</option>
-                  <option value="5A">
-                    5A - Relative accelerator pedal position
-                  </option>
-                  <option value="5B">
-                    5B - Hybrid battery pack remaining life
-                  </option>
-                  <option value="5C">5C - Engine oil temperature</option>
-                  <option value="5D">5D - Fuel injection timing</option>
-                  <option value="5E">5E - Engine fuel rate</option>
-                  <option value="5F">5F - Emission requirements</option>
-                  <option value="60">60 - PIDs supported [61 - 80]</option>
-
-                  <!-- PIDs 61 - 80 -->
-                  <option value="61">
-                    61 - Demanded engine percent torque
-                  </option>
-                  <option value="62">62 - Actual engine percent torque</option>
-                  <option value="63">63 - Engine reference torque</option>
-                  <option value="64">64 - Engine percent torque (idle)</option>
-                  <option value="65">
-                    65 - Auxiliary input/output supported
-                  </option>
-                  <option value="66">66 - Mass air flow sensor (A)</option>
-                  <option value="67">
-                    67 - Engine coolant temperature (sensor 1)
-                  </option>
-                  <option value="68">
-                    68 - Intake air temperature (sensor 1)
-                  </option>
-                  <option value="69">69 - Commanded EGR and EGR error</option>
-                  <option value="6A">
-                    6A - Common diesel intake air flow control/position
-                  </option>
-                  <option value="6B">
-                    6B - Exhaust gas recirculation temperature
-                  </option>
-                  <option value="6C">
-                    6C - Common throttle actuator control/position
-                  </option>
-                  <option value="6D">6D - Fuel pressure control system</option>
-                  <option value="6E">
-                    6E - Injection pressure control system
-                  </option>
-                  <option value="6F">
-                    6F - Turbocharger compressor inlet pressure
-                  </option>
-                  <option value="70">70 - Boost pressure control</option>
-                  <option value="71">
-                    71 - Variable geometry turbo control
-                  </option>
-                  <option value="72">72 - Wastegate control</option>
-                  <option value="73">73 - Exhaust pressure</option>
-                  <option value="74">74 - Turbocharger RPM</option>
-                  <option value="75">75 - Turbocharger temperature</option>
-                  <option value="76">76 - Turbocharger temperature</option>
-                  <option value="77">77 - Charge air cooler temperature</option>
-                  <option value="78">78 - EGT (bank 1)</option>
-                  <option value="79">79 - EGT (bank 2)</option>
-                  <option value="7A">
-                    7A - Diesel particulate filter - differential pressure
-                  </option>
-                  <option value="7B">7B - Diesel particulate filter</option>
-                  <option value="7C">
-                    7C - Diesel particulate filter - temperature
-                  </option>
-                  <option value="7D">7D - NOx NTE control area status</option>
-                  <option value="7E">7E - PM NTE control area status</option>
-                  <option value="7F">7F - Engine run time</option>
-                  <option value="80">80 - PIDs supported [81 - A0]</option>
-
-                  <!-- PIDs 81 - A0 -->
-                  <option value="81">81 - Engine run time for AECD</option>
-                  <option value="82">82 - Engine run time for AECD</option>
-                  <option value="83">83 - NOx sensor</option>
-                  <option value="84">84 - Manifold surface temperature</option>
-                  <option value="85">85 - NOx reagent system</option>
-                  <option value="86">86 - Particulate matter sensor</option>
-                  <option value="87">
-                    87 - Intake manifold absolute pressure
-                  </option>
-                  <option value="88">88 - SCR induce system</option>
-                  <option value="89">89 - Run time for AECD #11-#15</option>
-                  <option value="8A">8A - Run time for AECD #16-#20</option>
-                  <option value="8B">8B - Diesel aftertreatment</option>
-                  <option value="8C">8C - O2 sensor (wide range)</option>
-                  <option value="8D">8D - Throttle position G</option>
-                  <option value="8E">
-                    8E - Engine friction percent torque
-                  </option>
-                  <option value="8F">
-                    8F - Particulate matter sensor (bank 1 & 2)
-                  </option>
-                  <option value="90">
-                    90 - WWH-OBD vehicle OBD system Info
-                  </option>
-                  <option value="91">
-                    91 - WWH-OBD vehicle OBD system Info
-                  </option>
-                  <option value="92">92 - Fuel system control</option>
-                  <option value="93">93 - WWH-OBD counters support</option>
-                  <option value="94">
-                    94 - NOx warning and inducement system
-                  </option>
-                  <option value="95">95 -</option>
-                  <option value="96">96 -</option>
-                  <option value="97">97 -</option>
-                  <option value="98">98 - EGT sensor</option>
-                  <option value="99">99 - EGT sensor</option>
-                  <option value="9A">
-                    9A - Hybrid/EV system data, battery, voltage
-                  </option>
-                  <option value="9B">
-                    9B - Diesel exhaust fluid sensor data
-                  </option>
-                  <option value="9C">9C - O2 sensor data</option>
-                  <option value="9D">9D - Engine fuel rate</option>
-                  <option value="9E">9E - Engine exhaust flow rate</option>
-                  <option value="9F">9F - Fuel system percentage use</option>
-                  <option value="A0">A0 - PIDs supported [A1 - C0]</option>
-
-                  <!-- PIDs A1 - C0 -->
-                  <option value="A1">A1 - NOx sensor corrected data</option>
-                  <option value="A2">A2 - Cylinder fuel rate</option>
-                  <option value="A3">A3 - Evap system vapor pressure</option>
-                  <option value="A4">A4 - Transmission actual gear</option>
-                  <option value="A5">
-                    A5 - Commanded diesel exhaust fluid dosing
-                  </option>
-                  <option value="A6">A6 - Odometer</option>
-                  <option value="A7">A7 - NOx concentration 3, 4</option>
-                  <option value="A8">
-                    A8 - NOx corrected concentration (3, 4)
-                  </option>
-                  <option value="A9">A9 -</option>
-                  <option value="AA">AA -</option>
-                  <option value="AB">AB -</option>
-                  <option value="AC">AC -</option>
-                  <option value="AD">AD -</option>
-                  <option value="AE">AE -</option>
-                  <option value="AF">AF -</option>
-                  <option value="B0">B0 -</option>
-                  <option value="B1">B1 -</option>
-                  <option value="B2">B2 -</option>
-                  <option value="B3">B3 -</option>
-                  <option value="B4">B4 -</option>
-                  <option value="B5">B5 -</option>
-                  <option value="B6">B6 -</option>
-                  <option value="B7">B7 -</option>
-                  <option value="B8">B8 -</option>
-                  <option value="B9">B9 -</option>
-                  <option value="BA">BA -</option>
-                  <option value="BB">BB -</option>
-                  <option value="BC">BC -</option>
-                  <option value="BD">BD -</option>
-                  <option value="BE">BE -</option>
-                  <option value="BF">BF -</option>
-                  <option value="C0">C0 - PIDs supported [C1 - E0]</option>
-                </select>
-              </div>
-              <div class="rawdata-cyle-main-cnt">
-                <div class="rawdata-inp-txt-cnt">
-                  <span>Cyclic Time (s) </span>
-                </div>
-                <input type="text" placeholder="Enter The Cycle Time (s)" />
-              </div>
-              <div class="rawdata-count-main-cnt">
-                <div class="rawdata-inp-txt-cnt">
-                  <span>Count </span>
-                </div>
-                <input type="text" placeholder="Enter the count" />
-              </div>
-              <button id="rawdata-inp-btn1" style="margin: 0px">
-                <p>Start</p>
-              </button>
-            </div>
+            <table>
+              <thead>
+                <tr>
+                  <th id="rawdata-receive-time-cnt">Time Offset</th>
+                  <th id="rawdata-receive-id-cnt">ID</th>
+                  <th id="rawdata-receive-txrx-cnt">Tx</th>
+                  <th id="rawdata-receive-datalength-cnt">Data length</th>
+                  <th id="rawdata-receive-data-cnt">Data</th>
+                </tr>
+              </thead>
+              <tbody id="data-table-body"></tbody>
+            </table>
           </div>
         </div>
       </div>
@@ -408,15 +69,89 @@
               <tr>
                 <th id="rawdata-receive-time-cnt">Time Offset</th>
                 <th id="rawdata-receive-id-cnt">ID</th>
-                <th id="rawdata-receive-txrx-cnt">Rx/Tx</th>
+                <th id="rawdata-receive-txrx-cnt">Rx</th>
                 <th id="rawdata-receive-datalength-cnt">Data length</th>
                 <th id="rawdata-receive-data-cnt">Data</th>
               </tr>
             </thead>
-            <tbody id="data-table-body"></tbody>
+            <tbody id="receiver-table-body"></tbody>
           </table>
         </div>
       </div>
     </div>
+    <div id="popup" class="rawdata-user-popup-main-cnt">
+      <div class="rawdata-user-popup-main-inner-cnt">
+        <div class="rawdata-inp-main-inner-cnt">
+          <div class="rawdata-inp-inner-data-cnt">
+            <div class="rawdata-inp1-data-cnt">
+              <span> ID :</span>
+              <input type="text" placeholder="7DF" />
+            </div>
+            <div class="rawdata-inp-data-cnt">
+              <span>length :</span>
+              <select id="number-select" name="number">
+                <option value="4">4</option>
+                <option value="6">6</option>
+                <option value="8">8</option>
+              </select>
+            </div>
+            <div class="rawdata-inp3-data-cnt">
+              <span>Data: (hexa)</span>
+              <div class="rawdata-inp3-data-inner-cnt">
+                <div class="rawdata-inp3-data-inner-txt-cnt">
+                  <input type="text" placeholder="00" />
+                  <span>0</span>
+                </div>
+                <div class="rawdata-inp3-data-inner-txt-cnt">
+                  <input type="text" placeholder="00" />
+                  <span>1</span>
+                </div>
+                <div class="rawdata-inp3-data-inner-txt-cnt">
+                  <input type="text" placeholder="00" />
+                  <span>2</span>
+                </div>
+                <div class="rawdata-inp3-data-inner-txt-cnt">
+                  <input type="text" placeholder="00" />
+                  <span>3</span>
+                </div>
+                <div class="rawdata-inp3-data-inner-txt-cnt">
+                  <input type="text" placeholder="00" />
+                  <span>4</span>
+                </div>
+                <div class="rawdata-inp3-data-inner-txt-cnt">
+                  <input type="text" placeholder="00" />
+                  <span>5</span>
+                </div>
+                <div class="rawdata-inp3-data-inner-txt-cnt">
+                  <input type="text" placeholder="00" />
+                  <span>6</span>
+                </div>
+                <div class="rawdata-inp3-data-inner-txt-cnt">
+                  <input type="text" placeholder="00" />
+                  <span>7</span>
+                </div>
+              </div>
+            </div>
+          </div>
+          <div class="rawdata-inp-inner-cycle-cnt">
+            <span>Cyclic Time :</span>
+            <div class="rawdata-inp-inner-cycle-inner-cnt">
+              <input type="text" placeholder="In ms" />
+              <span>ms</span>
+            </div>
+          </div>
+          <div class="rawdata-inp-inner-count-cnt">
+            <span>Count : </span>
+            <input type="text" placeholder="count" />
+          </div>
+          <div class="rawdata-pop-btn-cnt">
+            <button id="rawdata-inp-btn1" style="margin: 0px">
+              <p>Start</p>
+            </button>
+          </div>
+        </div>
+      </div>
+    </div>
+    <script src="renderRaw.js"></script>
   </body>
 </html>
