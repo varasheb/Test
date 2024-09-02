@@ -10,6 +10,7 @@ import { HexConverter } from "./decodeRawFrame.js";
 const __dirname = dirname(fileURLToPath(import.meta.url));
 let mainWindow;
 let cycleInterval;
+let cyclicTime;
 
 function createWindow() {
   mainWindow = new BrowserWindow({
@@ -43,6 +44,7 @@ ipcMain.on("send-pid", (event, pid) => {
 
 ipcMain.on("send-raw-can-data", (event, rawData) => {
   const hexdata = rawData.data.join("");
+  cyclicTime = rawData.cyclicTime;
   if (parseInt(rawData.cyclicTime) >= 1000)
     cycleInterval = setInterval(() => {
       sendCanRequest(rawData.id, hexdata);
@@ -70,6 +72,7 @@ candump.stdout.on("data", (data) => {
         rawData: frame,
         binaryData,
         decimalData,
+        cyclicTime,
       });
     }
   });

@@ -202,7 +202,7 @@ export function decodeFrame(data) {
 
       case "20":
         return {
-          id: "00",
+          id: "20",
           name: "Monitor status since DTCs Cleared",
           value: decodedata.supported_pids_20(hexdata),
         };

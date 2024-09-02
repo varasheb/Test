@@ -87,7 +87,12 @@
           <div class="rawdata-inp-inner-data-cnt">
             <div class="rawdata-inp1-data-cnt">
               <span> ID :</span>
-              <input type="text" placeholder="7DF" />
+              <input
+                type="text"
+                placeholder="7DF"
+                oninput="validateId(this)"
+                maxlength="3"
+              />
             </div>
             <div class="rawdata-inp-data-cnt">
               <span>length :</span>
@@ -175,8 +180,12 @@
             </div>
           </div>
           <div class="rawdata-inp-inner-count-cnt">
-            <span>Count : </span>
-            <input type="text" placeholder="count" />
+            <span>Response in : </span>
+            <select id="number-type-output" name="type">
+              <option value="rawData">Hexa</option>
+              <option value="binaryData">Binary</option>
+              <option value="decimalData">Decimal</option>
+            </select>
           </div>
           <div class="rawdata-pop-btn-cnt">
             <button id="rawdata-inp-btn1" style="margin: 0px">

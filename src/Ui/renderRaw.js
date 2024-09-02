@@ -40,9 +40,16 @@ document.addEventListener("DOMContentLoaded", function () {
   startBtn.addEventListener("click", function () {
     rawData.id = idInput.value;
     rawData.length = lengthSelect.value;
-    rawData.data = Array.from(dataInputs).map((input) => input.value);
+    data = Array.from(dataInputs).map((input) => {
+      if (input.value) {
+        return input.value;
+      }
+
+      return "00";
+    });
+
+    rawData.data = data;
     rawData.cyclicTime = cyclicTimeInput.value;
-    rawData.count = countInput.value;
     console.log(rawData);
     window.electron.sendRawCANData(rawData);
 
@@ -68,39 +75,80 @@ document.addEventListener("DOMContentLoaded", function () {
     idInput.value = "";
     dataInputs.forEach((input) => (input.value = ""));
     cyclicTimeInput.value = "";
-    countInput.value = "";
 
     closePopup();
   });
   //----------
+  let count;
   function updateReceiverTable(data) {
     const tableBody = document.getElementById("receiver-table-body");
+    const typeOfResponse = document.getElementById("number-type-output").value;
+    let value = null;
 
-    const { timeStamp, rawData } = data;
+    const { id, timeStamp, binaryData, decimalData, rawData } = data;
+    switch (typeOfResponse) {
+      case "binaryData":
+        value = binaryData;
+        break;
+      case "decimalData":
+        value = decimalData;
+        break;
+      case "rawData":
+        value = rawData;
+        break;
+      default:
+        break;
+    }
+
+    const rowId = `new-row-receive-${id}`;
     console.log(data);
-    const newRow = document.createElement("tr");
 
-    const timeCell = document.createElement("td");
-    timeCell.textContent = timeStamp;
-    newRow.appendChild(timeCell);
+    let existingRow = document.getElementById(rowId);
 
-    const idCell = document.createElement("td");
-    idCell.textContent = "N/A";
-    newRow.appendChild(idCell);
+    if (existingRow) {
+      let existingCountCell = document.getElementById(
+        `receive-data-count-value-${id}`
+      );
+      let existingCount = parseInt(existingCountCell.textContent);
 
-    const txrxCell = document.createElement("td");
-    txrxCell.textContent = "Rx";
-    newRow.appendChild(txrxCell);
+      existingRow.cells[0].textContent = timeStamp;
+      existingRow.cells[3].textContent = rawData.split("  ")[3];
+      existingRow.cells[4].textContent = value;
+      existingRow.cells[6].textContent = existingCount + 1;
+    } else {
+      const newRow = document.createElement("tr");
+      newRow.id = rowId;
 
-    const lengthCell = document.createElement("td");
-    lengthCell.textContent = rawData.length;
-    newRow.appendChild(lengthCell);
+      const timeCell = document.createElement("td");
+      timeCell.textContent = timeStamp;
+      newRow.appendChild(timeCell);
 
-    const dataCell = document.createElement("td");
-    dataCell.textContent = rawData;
-    newRow.appendChild(dataCell);
+      const idCell = document.createElement("td");
+      idCell.textContent = id;
+      newRow.appendChild(idCell);
 
-    tableBody.appendChild(newRow);
+      const txrxCell = document.createElement("td");
+      txrxCell.textContent = "Rx";
+      newRow.appendChild(txrxCell);
+
+      const lengthCell = document.createElement("td");
+      lengthCell.textContent = rawData.split("  ")[3];
+      newRow.appendChild(lengthCell);
+
+      const dataCell = document.createElement("td");
+      dataCell.textContent = value;
+      newRow.appendChild(dataCell);
+
+      const intervalCell = document.createElement("td");
+      intervalCell.textContent = data.cyclicTime || "";
+      newRow.appendChild(intervalCell);
+
+      const countCell = document.createElement("td");
+      countCell.textContent = "1";
+      countCell.id = `receive-data-count-value-${id}`;
+      newRow.appendChild(countCell);
+      tableBody.appendChild(newRow);
+    }
   }
 
   window.electron.onCANData((data) => {
@@ -111,6 +159,14 @@ document.addEventListener("DOMContentLoaded", function () {
 function validateHex(input) {
   input.value = input.value.toUpperCase();
   const hexPattern = /^[0-9A-F]{0,2}$/;
+  if (!hexPattern.test(input.value)) {
+    input.value = input.value.slice(0, -1);
+  }
+}
+
+function validateId(input) {
+  input.value = input.value.toUpperCase();
+  const hexPattern = /^[0-9A-F]{0,3}$/;
   if (!hexPattern.test(input.value)) {
     input.value = input.value.slice(0, -1);
   }

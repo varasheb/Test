@@ -198,9 +198,8 @@
 .rawdata-receive-main-display-cnt {
   width: 96.5%;
   height: 100%;
-  /* display: flex;
-  flex-direction: column; */
-  overflow: auto;
+  display: flex;
+  flex-direction: column;
   border: 1px solid rgb(82, 80, 80);
 }
 
@@ -303,6 +302,10 @@ tr {
   align-items: center;
 }
 
+#number-type-output {
+  width: 100px;
+  height: 30px;
+}
 .rawdata-inp-inner-data-cnt {
   width: 100%;
   display: flex;
@@ -372,17 +375,12 @@ tr {
 
 .rawdata-inp-inner-count-cnt {
   display: flex;
-  flex-direction: column;
+  /* flex-direction: column; */
   gap: 5px;
-
-  input {
-    width: 100px;
-    height: 25px;
-  }
 }
 
 table {
-  width: 100%;
+  max-width: 100%;
   /* border-collapse: collapse; */
 }
 
