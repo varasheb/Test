@@ -51,22 +51,28 @@ ipcMain.on("send-raw-can-data", (event, rawData) => {
 
 //======================================================
 
-const canChannel = "vcan0";
+const canChannel = "can0";
 const candump = spawn("candump", [canChannel]);
 
 candump.stdout.on("data", (data) => {
-  const decodedResult = decodeFrame(data.toString()); // Decode CAN data
-  console.log(`CAN message: ${data.toString()}`);
-  if (decodedResult) {
+  const dataString = data.toString();
+  const frames = dataString.split("\n").filter((line) => line.trim() !== "");
+  frames.forEach((frame) => {
+    const decodedResult = decodeFrame(frame);
+    console.log(`CAN message: ${frame}`);
     if (mainWindow) {
       const timeStamp = new Date().toISOString();
+      const binaryData = HexConverter.hexToBinary(frame);
+      const decimalData = HexConverter.hexToDecimal(frame);
       mainWindow.webContents.send("can-data", {
         timeStamp,
         ...decodedResult,
-        rawData: data.toString(),
+        rawData: frame,
+        binaryData,
+        decimalData,
       });
     }
-  }
+  });
 });
 
 candump.stderr.on("data", (data) => {

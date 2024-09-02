@@ -14,6 +14,8 @@ export function decodeFrame(data) {
     const decodedata = new DataHexDecoder();
     switch (pid) {
       case "00":
+        const supported_pids_00 = checkForSupported("00", hexdata);
+        sendRequestForSupportedPIds(supported_pids_00);
         return {
           id: "00",
           name: "Monitor status since DTCs Cleared",

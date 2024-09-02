@@ -25,7 +25,9 @@
   /* border: 2px solid black; */
   box-sizing: border-box;
 }
-
+td {
+  background-color: #ffffff;
+}
 #rawdata-btn1 {
   width: 170px;
   height: 40px;
@@ -340,76 +342,4 @@ tr {
     width: 100px;
     height: 25px;
   }
-}
-/* ------------------------------- */
-/* Ensure the table takes full width */
-table {
-  width: 100%;
-  border-collapse: collapse; /* Collapses borders to avoid double borders */
-}
-
-/* Table header styling */
-thead th {
-  background-color: #4caf50; /* Background color for the header */
-  color: white; /* Text color for the header */
-  padding: 12px; /* Padding inside header cells */
-  text-align: left; /* Align text to the left */
-  border-bottom: 2px solid #ddd; /* Bottom border for header cells */
-}
-
-/* Table body styling */
-tbody {
-  display: block; /* Allows setting height and scroll behavior */
-  max-height: 400px; /* Adjust based on your needs */
-  overflow-y: auto; /* Enables vertical scrolling if content exceeds max-height */
-}
-
-/* Table rows */
-tbody tr {
-  display: table; /* Ensures rows are displayed correctly */
-  width: 100%; /* Ensures rows take full width of the table */
-  box-sizing: border-box; /* Includes padding and border in element's total width and height */
-}
-
-/* Table cells in the body */
-tbody td {
-  padding: 12px; /* Padding inside cells */
-  text-align: left; /* Align text to the left */
-  border-bottom: 1px solid #ddd; /* Bottom border for cells */
-}
-
-/* Align cells in the body with header columns */
-thead th:nth-child(1),
-tbody td:nth-child(1) {
-  width: 12%; /* Adjust based on your needs */
-}
-
-thead th:nth-child(2),
-tbody td:nth-child(2) {
-  width: 15%; /* Adjust based on your needs */
-}
-
-thead th:nth-child(3),
-tbody td:nth-child(3) {
-  width: 8%; /* Adjust based on your needs */
-}
-
-thead th:nth-child(4),
-tbody td:nth-child(4) {
-  width: 15%; /* Adjust based on your needs */
-}
-
-thead th:nth-child(5),
-tbody td:nth-child(5) {
-  width: 50%; /* Adjust based on your needs */
-}
-
-/* Optional: Alternate row colors for better readability */
-tbody tr:nth-child(even) {
-  background-color: #f1f1f1; /* Alternate row colors */
-}
-
-/* Optional: Improve vertical alignment of text */
-tbody td {
-  vertical-align: middle; /* Align text vertically in the center of cells */
 }
