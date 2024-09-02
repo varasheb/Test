@@ -46,19 +46,36 @@ document.addEventListener("DOMContentLoaded", function () {
     console.log(rawData);
     window.electron.sendRawCANData(rawData);
 
-    const newRow = transmitterTableBody.insertRow();
+    const existingRow = Array.from(transmitterTableBody.rows).find(
+      (row) => row.cells[1].textContent === rawData.id
+    );
 
-    newRow.insertCell(0).textContent = "0ms";
-    newRow.insertCell(1).textContent = rawData.id;
-    newRow.insertCell(2).textContent = "Tx";
-    newRow.insertCell(3).textContent = rawData.length;
-    newRow.insertCell(4).textContent = rawData.data.join(" ");
+    if (existingRow) {
+      existingRow.cells[0].textContent = rawData.id;
+      existingRow.cells[1].textContent = "Tx";
+      existingRow.cells[2].textContent = rawData.length;
+      existingRow.cells[3].textContent = rawData.cyclicTime;
+      existingRow.cells[4].textContent = rawData.data.join(" ");
+    } else {
+      const newRow = transmitterTableBody.insertRow();
+      newRow.insertCell(0).textContent = rawData.id;
+      newRow.insertCell(1).textContent = "Tx";
+      newRow.insertCell(2).textContent = rawData.length;
+      newRow.insertCell(3).textContent = rawData.cyclicTime;
+      newRow.insertCell(4).textContent = rawData.data.join(" ");
+    }
+
+    idInput.value = "";
+    dataInputs.forEach((input) => (input.value = ""));
+    cyclicTimeInput.value = "";
+    countInput.value = "";
 
     closePopup();
   });
   //----------
   function updateReceiverTable(data) {
     const tableBody = document.getElementById("receiver-table-body");
+
     const { timeStamp, rawData } = data;
     console.log(data);
     const newRow = document.createElement("tr");
@@ -90,3 +107,11 @@ document.addEventListener("DOMContentLoaded", function () {
     updateReceiverTable(data);
   });
 });
+
+function validateHex(input) {
+  input.value = input.value.toUpperCase();
+  const hexPattern = /^[0-9A-F]{0,2}$/;
+  if (!hexPattern.test(input.value)) {
+    input.value = input.value.slice(0, -1);
+  }
+}

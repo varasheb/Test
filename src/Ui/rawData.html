@@ -39,11 +39,11 @@
             <table>
               <thead>
                 <tr>
-                  <th id="rawdata-receive-time-cnt">Time Offset</th>
-                  <th id="rawdata-receive-id-cnt">ID</th>
-                  <th id="rawdata-receive-txrx-cnt">Tx</th>
-                  <th id="rawdata-receive-datalength-cnt">Data length</th>
-                  <th id="rawdata-receive-data-cnt">Data</th>
+                  <th id="rawdata-transfer-id-cnt">ID</th>
+                  <th id="rawdata-transfer-txrx-cnt">Tx</th>
+                  <th id="rawdata-transfer-datalength-cnt">DLC</th>
+                  <th id="rawdata-transfer-time-cnt">Interval</th>
+                  <th id="rawdata-transfer-data-cnt">Data</th>
                 </tr>
               </thead>
               <tbody id="data-table-body"></tbody>
@@ -67,11 +67,13 @@
           <table>
             <thead>
               <tr>
-                <th id="rawdata-receive-time-cnt">Time Offset</th>
+                <th id="rawdata-receive-time-cnt">Time Stamp</th>
                 <th id="rawdata-receive-id-cnt">ID</th>
                 <th id="rawdata-receive-txrx-cnt">Rx</th>
-                <th id="rawdata-receive-datalength-cnt">Data length</th>
+                <th id="rawdata-receive-datalength-cnt">DLC</th>
                 <th id="rawdata-receive-data-cnt">Data</th>
+                <th id="rawdata-receive-data-interval-cnt">Interval</th>
+                <th id="rawdata-receive-data-count-cnt">Count</th>
               </tr>
             </thead>
             <tbody id="receiver-table-body"></tbody>
@@ -99,35 +101,67 @@
               <span>Data: (hexa)</span>
               <div class="rawdata-inp3-data-inner-cnt">
                 <div class="rawdata-inp3-data-inner-txt-cnt">
-                  <input type="text" placeholder="00" />
+                  <input
+                    type="text"
+                    placeholder="00"
+                    oninput="validateHex(this)"
+                  />
                   <span>0</span>
                 </div>
                 <div class="rawdata-inp3-data-inner-txt-cnt">
-                  <input type="text" placeholder="00" />
+                  <input
+                    type="text"
+                    placeholder="00"
+                    oninput="validateHex(this)"
+                  />
                   <span>1</span>
                 </div>
                 <div class="rawdata-inp3-data-inner-txt-cnt">
-                  <input type="text" placeholder="00" />
+                  <input
+                    type="text"
+                    placeholder="00"
+                    oninput="validateHex(this)"
+                  />
                   <span>2</span>
                 </div>
                 <div class="rawdata-inp3-data-inner-txt-cnt">
-                  <input type="text" placeholder="00" />
+                  <input
+                    type="text"
+                    placeholder="00"
+                    oninput="validateHex(this)"
+                  />
                   <span>3</span>
                 </div>
                 <div class="rawdata-inp3-data-inner-txt-cnt">
-                  <input type="text" placeholder="00" />
+                  <input
+                    type="text"
+                    placeholder="00"
+                    oninput="validateHex(this)"
+                  />
                   <span>4</span>
                 </div>
                 <div class="rawdata-inp3-data-inner-txt-cnt">
-                  <input type="text" placeholder="00" />
+                  <input
+                    type="text"
+                    placeholder="00"
+                    oninput="validateHex(this)"
+                  />
                   <span>5</span>
                 </div>
                 <div class="rawdata-inp3-data-inner-txt-cnt">
-                  <input type="text" placeholder="00" />
+                  <input
+                    type="text"
+                    placeholder="00"
+                    oninput="validateHex(this)"
+                  />
                   <span>6</span>
                 </div>
                 <div class="rawdata-inp3-data-inner-txt-cnt">
-                  <input type="text" placeholder="00" />
+                  <input
+                    type="text"
+                    placeholder="00"
+                    oninput="validateHex(this)"
+                  />
                   <span>7</span>
                 </div>
               </div>
