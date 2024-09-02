@@ -79,13 +79,14 @@ document.addEventListener("DOMContentLoaded", function () {
     closePopup();
   });
   //----------
-  let count;
   function updateReceiverTable(data) {
     const tableBody = document.getElementById("receiver-table-body");
     const typeOfResponse = document.getElementById("number-type-output").value;
     let value = null;
 
     const { id, timeStamp, binaryData, decimalData, rawData } = data;
+    const idOfResponse = rawData.split("  ")[2];
+
     switch (typeOfResponse) {
       case "binaryData":
         value = binaryData;
@@ -97,23 +98,30 @@ document.addEventListener("DOMContentLoaded", function () {
         value = rawData;
         break;
       default:
-        break;
+        console.error("Invalid typeOfResponse:", typeOfResponse);
+        return;
     }
 
-    const rowId = `new-row-receive-${id}`;
+    const rowId = `new-row-receive-${id}${idOfResponse}`;
     console.log(data);
 
     let existingRow = document.getElementById(rowId);
 
     if (existingRow) {
       let existingCountCell = document.getElementById(
-        `receive-data-count-value-${id}`
+        `receive-data-count-value-${id}${idOfResponse}`
       );
-      let existingCount = parseInt(existingCountCell.textContent);
+      if (!existingCountCell) {
+        console.error("Count cell not found for ID:", rowId);
+        return;
+      }
+      let existingCount = parseInt(existingCountCell.textContent, 10) || 0;
 
       existingRow.cells[0].textContent = timeStamp;
       existingRow.cells[3].textContent = rawData.split("  ")[3];
-      existingRow.cells[4].textContent = value;
+      existingRow.cells[4].textContent = value.includes("]")
+        ? value.slice(value.indexOf("]") + 1).trim()
+        : value;
       existingRow.cells[6].textContent = existingCount + 1;
     } else {
       const newRow = document.createElement("tr");
@@ -124,7 +132,7 @@ document.addEventListener("DOMContentLoaded", function () {
       newRow.appendChild(timeCell);
 
       const idCell = document.createElement("td");
-      idCell.textContent = id;
+      idCell.textContent = idOfResponse;
       newRow.appendChild(idCell);
 
       const txrxCell = document.createElement("td");
@@ -136,7 +144,9 @@ document.addEventListener("DOMContentLoaded", function () {
       newRow.appendChild(lengthCell);
 
       const dataCell = document.createElement("td");
-      dataCell.textContent = value;
+      dataCell.textContent = value.includes("]")
+        ? value.slice(value.indexOf("]") + 1).trim()
+        : value;
       newRow.appendChild(dataCell);
 
       const intervalCell = document.createElement("td");
@@ -145,7 +155,7 @@ document.addEventListener("DOMContentLoaded", function () {
 
       const countCell = document.createElement("td");
       countCell.textContent = "1";
-      countCell.id = `receive-data-count-value-${id}`;
+      countCell.id = `receive-data-count-value-${id}${idOfResponse}`;
       newRow.appendChild(countCell);
       tableBody.appendChild(newRow);
     }

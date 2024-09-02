@@ -1,37 +1,24 @@
-function extractData(input) {
-  let inputArr = input.trim().split(" ");
-  let extractedData = inputArr[4].slice(6);
-  return extractedData;
-}
-
 export class HexConverter {
-  static hexToDecimal(hex) {
-    let prefix = hex.slice(0, 16);
-    let newHex = extractData(hex);
-    if (!/^0x/.test(newHex)) {
-      newHex = "0x" + newHex;
-    }
+  static hexToDecimal(data) {
+    const arr = data.trim().split(/\s+/);
+    const prefix = arr.slice(0, 4).join(" ");
+    const hexValues = arr.slice(4);
+    const decimalValues = hexValues.map((hex) => parseInt(hex, 16));
+    const result = `${prefix} ${decimalValues.join(" ")}`;
 
-    const result = parseInt(newHex, 16);
-    return `${prefix} ${result}`;
+    return result;
   }
 
-  static hexToBinary(hex) {
-    let prefix = hex.slice(0, 16);
+  static hexToBinary(data) {
+    const arr = data.trim().split(/\s+/);
+    const prefix = arr.slice(0, 4).join(" ");
+    const hexValues = arr.slice(4);
+    const binaryValues = hexValues.map((hex) => {
+      const binary = parseInt(hex, 16).toString(2);
+      return binary.padStart(8, "0");
+    });
+    const result = `${prefix} ${binaryValues.join(" ")}`;
 
-    let newHex = extractData(hex);
-    if (!/^0x/.test(newHex)) {
-      newHex = "0x" + newHex;
-    }
-
-    const decimal = parseInt(newHex, 16);
-    const result = decimal
-      .toString(2)
-      .padStart(
-        decimal.toString(2).length +
-          ((4 - (decimal.toString(2).length % 4)) % 4),
-        "0"
-      );
-    return `${prefix} ${result}`;
+    return result;
   }
 }
