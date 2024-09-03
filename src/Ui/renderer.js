@@ -1,5 +1,13 @@
 window.onload = () => {
   const tableBody = document.getElementById("data-table-body");
+  document.getElementById("obd2-to-home-stop").addEventListener("click", () => {
+    console.log("stop");
+    window.electron.sendobdstopsignal("Stop the cycles");
+  });
+  document.getElementById("obd-inp-stop").addEventListener("click", () => {
+    console.log("stop");
+    window.electron.sendobdstopsignal("Stop the cycles");
+  });
 
   document.getElementById("obd-inp-start").addEventListener("click", () => {
     const selectedPID = document.getElementById("select-pids").value;

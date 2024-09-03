@@ -10,6 +10,9 @@ contextBridge.exposeInMainWorld("electron", {
   sendRowNumber: (rowId) => {
     ipcRenderer.send("stop-cyclic-request", rowId);
   },
+  sendobdstopsignal: (data) => {
+    ipcRenderer.send("stop-Obd2-request", data);
+  },
   onCANData: (callback) => {
     ipcRenderer.on("can-data", (event, data) => callback(data));
   },

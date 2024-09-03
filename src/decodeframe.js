@@ -18,7 +18,7 @@ export function decodeFrame(data) {
         sendRequestForSupportedPIds(supported_pids_00);
         return {
           id: "00",
-          name: "Monitor status since DTCs Cleared",
+          name: "PIDs supported [00 - 20]",
           value: decodedata.supported_pids_00(hexdata),
         };
 
@@ -201,9 +201,11 @@ export function decodeFrame(data) {
         };
 
       case "20":
+        const supported_pids_20 = checkForSupported("20", hexdata);
+        sendRequestForSupportedPIds(supported_pids_20);
         return {
           id: "20",
-          name: "Monitor status since DTCs Cleared",
+          name: "PIDs supported [21 - 40]",
           value: decodedata.supported_pids_20(hexdata),
         };
       case "21":
@@ -422,9 +424,11 @@ export function decodeFrame(data) {
           value: decodedata.calculate_catalyst_temperature(hexdata),
         };
       case "40":
+        const supported_pids_40 = checkForSupported("40", hexdata);
+        sendRequestForSupportedPIds(supported_pids_40);
         return {
           id: "40",
-          name: "Monitor status since DTCs Cleared",
+          name: "PIDs supported [41 - 60]",
           value: decodedata.supported_pids_40(hexdata),
         };
 
@@ -646,9 +650,11 @@ export function decodeFrame(data) {
         };
 
       case "60":
+        const supported_pids_60 = checkForSupported("60", hexdata);
+        sendRequestForSupportedPIds(supported_pids_60);
         return {
           id: "60",
-          name: "Monitor status since DTCs Cleared",
+          name: "PIDs supported [61 - 80]",
           value: decodedata.supported_pids_60(hexdata),
         };
 
@@ -715,9 +721,11 @@ export function decodeFrame(data) {
         };
 
       case "80":
+        const supported_pids_80 = checkForSupported("80", hexdata);
+        sendRequestForSupportedPIds(supported_pids_80);
         return {
           id: "80",
-          name: "Monitor status since DTCs Cleared",
+          name: "PIDs supported [81 - A0]",
           value: decodedata.supported_pids_80(hexdata),
         };
 
@@ -734,7 +742,14 @@ export function decodeFrame(data) {
           name: "Engine Friction - Percent Torque",
           value: decodedata.calculate_engine_friction_torque(hexdata),
         };
-
+      case "A0":
+        const supported_pids_A0 = checkForSupported("A0", hexdata);
+        sendRequestForSupportedPIds(supported_pids_A0);
+        return {
+          id: "A0",
+          name: "PIDs supported [A1 - C0]",
+          value: decodedata.supported_pids_A0(hexdata),
+        };
       case "A2":
         return {
           id: "A2",

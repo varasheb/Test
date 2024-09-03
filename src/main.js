@@ -4,7 +4,7 @@ import { dirname } from "node:path";
 import { fileURLToPath } from "node:url";
 import { spawn } from "child_process";
 import { decodeFrame } from "./decodeframe.js";
-import { sendCanRequest } from "./sendRequest.js";
+import { sendCanRequest, stopInterval } from "./sendRequest.js";
 import { HexConverter } from "./decodeRawFrame.js";
 
 const __dirname = dirname(fileURLToPath(import.meta.url));
@@ -64,6 +64,11 @@ ipcMain.on("stop-cyclic-request", (event, rowId) => {
   } else {
     console.log(`No cyclic request found for row ID: ${rowId}`);
   }
+});
+
+ipcMain.on("stop-Obd2-request", (event, data) => {
+  stopInterval();
+  console.log("Stop The obd2 cycles");
 });
 
 //======================================================
