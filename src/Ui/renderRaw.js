@@ -175,7 +175,7 @@ function validateHex(input) {
 
 function validateId(input) {
   input.value = input.value.toUpperCase();
-  const hexPattern = /^[0-9A-F]{0,3}$/;
+  const hexPattern = /^[0-9A-F]{0,8}$/;
   if (!hexPattern.test(input.value)) {
     input.value = input.value.slice(0, -1);
   }

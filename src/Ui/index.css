@@ -1,44 +1,102 @@
 * {
-    margin: 0px;
-    padding: 0px;
+  margin: 0px;
+  padding: 0px;
 }
 
 p {
-    z-index: 1000;
-    text-decoration: none;
+  z-index: 1000;
+  text-decoration: none;
 }
 
 .home-navbar-main-cnt {
-    width: 90%;
-    height: 80px;
-    display: flex;
-    justify-content: flex-start;
-    gap: 50px;
-    margin-top: 30px;
-    padding-left: 50px;
+  width: 90%;
+  height: 80px;
+  display: flex;
+  justify-content: flex-start;
+  gap: 50px;
+  margin-top: 30px;
+  padding-left: 50px;
 }
 
 .home-nav-btn-link {
-    z-index: 10;
+  z-index: 10;
 }
 
 button {
-    width: 170px;
-    height: 50px;
+  width: 170px;
+  height: 50px;
 }
 
-#home-navbar-btn1{
-    background-color: rgba(161, 86, 231, 0.63);
-    border: 3px solid black;
-    border-radius: 5px;
-    color: black;
-    font-weight: 600;
+#home-navbar-btn1 {
+  background-color: rgba(161, 86, 231, 0.63);
+  border: 3px solid black;
+  border-radius: 5px;
+  color: black;
+  font-weight: 600;
 }
 
-#home-navbar-btn2{
-    background-color: rgb(240, 203, 37);
-    border: 3px solid black;
-    border-radius: 5px;
-    color: black;
-    font-weight: 600;
+#home-navbar-btn2 {
+  background-color: rgb(240, 203, 37);
+  border: 3px solid black;
+  border-radius: 5px;
+  color: black;
+  font-weight: 600;
+}
+
+.bandrate-popup-main-cnt {
+  width: 100%;
+  height: 100vh;
+  position: absolute;
+  top: 0px;
+  left: 0px;
+  background-color: rgba(0, 0, 0, 0.3);
+  display: flex;
+  justify-content: center;
+  align-items: center;
+  visibility: hidden;
+  z-index: 1000;
+}
+
+.bandrate-popup-main-inner-cnt {
+  width: 15%;
+  height: 150px;
+  background-color: white;
+  border: 4px solid black;
+  border-radius: 10px;
+  padding: 20px;
+  display: flex;
+  flex-direction: column;
+}
+
+/* Hide the popup by default */
+/* .rawdata-user-popup-main-cnt {
+  display: none;
+  position: fixed;
+  top: 0;
+  left: 0;
+  width: 100%;
+  height: 100%; */
+/* background: rgba(0, 0, 0, 0.5); Semi-transparent background */
+/* justify-content: center;
+  align-items: center;
+}
+
+.rawdata-user-popup-main-inner-cnt {
+  background: #fff;
+  padding: 20px;
+  border-radius: 5px;
+  max-width: 500px;
+  margin: 0 auto;
+} */
+
+.bandrate-btn-cnt {
+  width: 100%;
+  display: flex;
+  justify-content: center;
+  align-items: center;
+}
+
+#number-select {
+  width: 80px;
+  margin-bottom: 30px;
 }
