@@ -1,4 +1,5 @@
 import { spawn, exec } from "child_process";
+
 let cycleInterval = [];
 export function sendCanRequest(canId, data) {
   const canInterface = "can0";

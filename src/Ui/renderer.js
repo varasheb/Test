@@ -59,4 +59,9 @@ window.onload = () => {
       tableBody.appendChild(row);
     }
   });
+
+  window.electron.onCANerror((data) => {
+    console.log("error", data);
+    alert(data);
+  });
 };

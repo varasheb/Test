@@ -165,6 +165,10 @@ document.addEventListener("DOMContentLoaded", function () {
   });
 });
 
+window.electron.onCANerror((data) => {
+  alert(data);
+});
+
 function validateHex(input) {
   input.value = input.value.toUpperCase();
   const hexPattern = /^[0-9A-F]{0,2}$/;

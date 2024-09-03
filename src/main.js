@@ -99,6 +99,7 @@ candump.stdout.on("data", (data) => {
 });
 
 candump.stderr.on("data", (data) => {
+  mainWindow.webContents.send("can-error", data.toString());
   console.error(`Error: ${data.toString()}`);
 });
 
