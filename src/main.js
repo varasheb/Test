@@ -9,7 +9,7 @@ import { HexConverter } from "./decodeRawFrame.js";
 
 const __dirname = dirname(fileURLToPath(import.meta.url));
 let mainWindow;
-let cycleInterval;
+let cycleInterval = [];
 let cyclicTime;
 
 function createWindow() {
@@ -44,11 +44,26 @@ ipcMain.on("send-pid", (event, pid) => {
 
 ipcMain.on("send-raw-can-data", (event, rawData) => {
   const hexdata = rawData.data.join("");
-  cyclicTime = rawData.cyclicTime;
-  if (parseInt(rawData.cyclicTime) >= 1000)
-    cycleInterval = setInterval(() => {
+  cyclicTime = parseInt(rawData.cyclicTime);
+
+  if (cyclicTime >= 1000) {
+    const intervalID = setInterval(() => {
       sendCanRequest(rawData.id, hexdata);
-    }, rawData.cyclicTime);
+    }, cyclicTime);
+
+    cycleInterval.push(intervalID);
+  }
+});
+
+ipcMain.on("stop-cyclic-request", (event, rowId) => {
+  const intervalID = cycleInterval[rowId];
+
+  if (intervalID) {
+    clearInterval(intervalID);
+    cycleInterval.splice(rowId, 1);
+  } else {
+    console.log(`No cyclic request found for row ID: ${rowId}`);
+  }
 });
 
 //======================================================

@@ -59,17 +59,20 @@ document.addEventListener("DOMContentLoaded", function () {
 
     if (existingRow) {
       existingRow.cells[0].textContent = rawData.id;
-      existingRow.cells[1].textContent = "Tx";
-      existingRow.cells[2].textContent = rawData.length;
+      existingRow.cells[1].textContent = rawData.length;
+      existingRow.cells[2].textContent = rawData.data.join(" ");
       existingRow.cells[3].textContent = rawData.cyclicTime;
-      existingRow.cells[4].textContent = rawData.data.join(" ");
     } else {
       const newRow = transmitterTableBody.insertRow();
+      newRow.id = `transfer-data-row-${rawData.id}${rawData.data.join(" ")}`;
       newRow.insertCell(0).textContent = rawData.id;
-      newRow.insertCell(1).textContent = "Tx";
-      newRow.insertCell(2).textContent = rawData.length;
+      newRow.insertCell(1).textContent = rawData.length;
+      newRow.insertCell(2).textContent = rawData.data.join(" ");
       newRow.insertCell(3).textContent = rawData.cyclicTime;
-      newRow.insertCell(4).textContent = rawData.data.join(" ");
+      const removeCell = newRow.insertCell(4);
+      removeCell.innerHTML = `<p onclick="removetablerow('transfer-data-row-${
+        rawData.id
+      }${rawData.data.join(" ")}', this)">❌</p>`;
     }
 
     idInput.value = "";
@@ -78,6 +81,7 @@ document.addEventListener("DOMContentLoaded", function () {
 
     closePopup();
   });
+
   //----------
   function updateReceiverTable(data) {
     const tableBody = document.getElementById("receiver-table-body");
@@ -85,6 +89,7 @@ document.addEventListener("DOMContentLoaded", function () {
     let value = null;
 
     const { id, timeStamp, binaryData, decimalData, rawData } = data;
+    console.log(data);
     const idOfResponse = rawData.split("  ")[2];
 
     switch (typeOfResponse) {
@@ -103,8 +108,6 @@ document.addEventListener("DOMContentLoaded", function () {
     }
 
     const rowId = `new-row-receive-${id}${idOfResponse}`;
-    console.log(data);
-
     let existingRow = document.getElementById(rowId);
 
     if (existingRow) {
@@ -118,11 +121,11 @@ document.addEventListener("DOMContentLoaded", function () {
       let existingCount = parseInt(existingCountCell.textContent, 10) || 0;
 
       existingRow.cells[0].textContent = timeStamp;
-      existingRow.cells[3].textContent = rawData.split("  ")[3];
-      existingRow.cells[4].textContent = value.includes("]")
+      existingRow.cells[2].textContent = rawData.split("  ")[3];
+      existingRow.cells[3].textContent = value.includes("]")
         ? value.slice(value.indexOf("]") + 1).trim()
         : value;
-      existingRow.cells[6].textContent = existingCount + 1;
+      existingRow.cells[5].textContent = existingCount + 1;
     } else {
       const newRow = document.createElement("tr");
       newRow.id = rowId;
@@ -134,10 +137,6 @@ document.addEventListener("DOMContentLoaded", function () {
       const idCell = document.createElement("td");
       idCell.textContent = idOfResponse;
       newRow.appendChild(idCell);
-
-      const txrxCell = document.createElement("td");
-      txrxCell.textContent = "Rx";
-      newRow.appendChild(txrxCell);
 
       const lengthCell = document.createElement("td");
       lengthCell.textContent = rawData.split("  ")[3];
@@ -179,5 +178,21 @@ function validateId(input) {
   const hexPattern = /^[0-9A-F]{0,3}$/;
   if (!hexPattern.test(input.value)) {
     input.value = input.value.slice(0, -1);
+  }
+}
+function removetablerow(row, element) {
+  const rowToRemove = element.closest("tr");
+
+  if (rowToRemove) {
+    const rowIndex = Array.from(rowToRemove.parentElement.children).indexOf(
+      rowToRemove
+    );
+
+    console.log(`Removing row at index: ${rowIndex}`);
+    window.electron.sendRowNumber(rowIndex);
+
+    rowToRemove.remove();
+  } else {
+    console.log(`Row not found.`);
   }
 }

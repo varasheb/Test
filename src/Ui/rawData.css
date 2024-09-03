@@ -51,7 +51,7 @@
 
 .rawdata-receive-main-cnt {
   width: 100%;
-  height: 65%;
+  height: 64.8%;
   /* border: 2px solid black; */
   box-sizing: border-box;
   display: flex;
@@ -265,7 +265,7 @@ tr {
 
 .rawdata-user-popup-main-inner-cnt {
   width: 35%;
-  height: 280px;
+  height: 215px;
   background-color: white;
   border: 4px solid black;
   border-radius: 10px;
@@ -374,8 +374,11 @@ tr {
 }
 
 .rawdata-inp-inner-count-cnt {
+  padding-left: 30px;
+  font-size: 20px;
   display: flex;
   /* flex-direction: column; */
+  align-items: center;
   gap: 5px;
 }
 
@@ -389,4 +392,8 @@ thead th {
   position: sticky;
   top: 0;
   z-index: 1;
+}
+
+#rawdata-transfer-edit-cnt {
+  width: 5%;
 }

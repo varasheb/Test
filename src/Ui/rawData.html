@@ -21,6 +21,14 @@
               <p style="color: black">Add Request</p>
             </a>
           </button>
+          <div class="rawdata-inp-inner-count-cnt">
+            <span>Response in : </span>
+            <select id="number-type-output" name="type">
+              <option value="rawData">Hexa</option>
+              <option value="binaryData">Binary</option>
+              <option value="decimalData">Decimal</option>
+            </select>
+          </div>
         </div>
         <div class="rawdata-transfer-inp-main-cnt">
           <div class="rawdata-transfer-txt-main-cnt">
@@ -40,10 +48,10 @@
               <thead>
                 <tr>
                   <th id="rawdata-transfer-id-cnt">ID</th>
-                  <th id="rawdata-transfer-txrx-cnt">Tx</th>
                   <th id="rawdata-transfer-datalength-cnt">DLC</th>
-                  <th id="rawdata-transfer-time-cnt">Interval</th>
                   <th id="rawdata-transfer-data-cnt">Data</th>
+                  <th id="rawdata-transfer-time-cnt">Interval</th>
+                  <th id="rawdata-transfer-edit-cnt"></th>
                 </tr>
               </thead>
               <tbody id="data-table-body"></tbody>
@@ -69,7 +77,6 @@
               <tr>
                 <th id="rawdata-receive-time-cnt">Time Stamp</th>
                 <th id="rawdata-receive-id-cnt">ID</th>
-                <th id="rawdata-receive-txrx-cnt">Rx</th>
                 <th id="rawdata-receive-datalength-cnt">DLC</th>
                 <th id="rawdata-receive-data-cnt">Data</th>
                 <th id="rawdata-receive-data-interval-cnt">Interval</th>
@@ -179,14 +186,7 @@
               <span>ms</span>
             </div>
           </div>
-          <div class="rawdata-inp-inner-count-cnt">
-            <span>Response in : </span>
-            <select id="number-type-output" name="type">
-              <option value="rawData">Hexa</option>
-              <option value="binaryData">Binary</option>
-              <option value="decimalData">Decimal</option>
-            </select>
-          </div>
+
           <div class="rawdata-pop-btn-cnt">
             <button id="rawdata-inp-btn1" style="margin: 0px">
               <p>Start</p>
