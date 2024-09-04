@@ -66,6 +66,14 @@ ipcMain.on("stop-cyclic-request", (event, rowId) => {
   }
 });
 
+ipcMain.on("stop-cyclic-request-edit", (event, rowId) => {
+  if (rowId > 0) {
+    const intervalID = cycleInterval.pop();
+    cycleInterval.splice(rowId, 0, intervalID);
+    console.log("edited", rowId);
+  }
+});
+
 ipcMain.on("stop-Obd2-request", (event, data) => {
   stopInterval();
   console.log("Stop The obd2 cycles");

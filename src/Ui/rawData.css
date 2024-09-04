@@ -12,7 +12,20 @@
     background-color: #b9cad1;
   }
 }
+/* -------------------------------------------------------------------------------- */
+@keyframes twinkle {
+  0% { background-color: #e96267; }
+  50% { background-color: #e90b5c; } /* Change this color to your preference */
+  100% { background-color: #fc6c7d; }
+}
 
+.twinkle {
+  animation: twinkle 1s ease-in-out;
+}
+
+.twinkle {
+  animation: twinkle 1s ease-in-out;
+}
 .rawdata-main-cnt {
   width: 100%;
   height: 100vh;
