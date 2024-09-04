@@ -1,3 +1,4 @@
+//start
 document.addEventListener("DOMContentLoaded", function () {
   const addRequestBtn = document.getElementById("rawdata-btn2");
   const popup = document.getElementById("popup");
@@ -17,7 +18,8 @@ document.addEventListener("DOMContentLoaded", function () {
     ".rawdata-transfer-inp-main-cnt tbody"
   );
 
-  const rawData = {};
+  let rawData = {};
+  let editingRow = null;
 
   function openPopup() {
     popup.style.visibility = "visible";
@@ -28,6 +30,11 @@ document.addEventListener("DOMContentLoaded", function () {
   }
 
   addRequestBtn.addEventListener("click", function () {
+    editingRow = null;
+    idInput.value = "";
+    lengthSelect.value = "";
+    dataInputs.forEach((input) => (input.value = ""));
+    cyclicTimeInput.value = "";
     openPopup();
   });
 
@@ -40,28 +47,24 @@ document.addEventListener("DOMContentLoaded", function () {
   startBtn.addEventListener("click", function () {
     rawData.id = idInput.value;
     rawData.length = lengthSelect.value;
-    data = Array.from(dataInputs).map((input) => {
+    rawData.data = Array.from(dataInputs).map((input) => {
       if (input.value) {
         return input.value;
       }
-
       return "00";
     });
-
-    rawData.data = data;
     rawData.cyclicTime = cyclicTimeInput.value;
     console.log(rawData);
+
     window.electron.sendRawCANData(rawData);
 
-    const existingRow = Array.from(transmitterTableBody.rows).find(
-      (row) => row.cells[1].textContent === rawData.id
-    );
-
-    if (existingRow) {
-      existingRow.cells[0].textContent = rawData.id;
-      existingRow.cells[1].textContent = rawData.length;
-      existingRow.cells[2].textContent = rawData.data.join(" ");
-      existingRow.cells[3].textContent = rawData.cyclicTime;
+    if (editingRow) {
+      // Update the existing row
+      editingRow.cells[0].textContent = rawData.id;
+      editingRow.cells[1].textContent = rawData.length;
+      editingRow.cells[2].textContent = rawData.data.join(" ");
+      editingRow.cells[3].textContent = rawData.cyclicTime;
+      stopCycle(editingRow); // Stop the previous cycle
     } else {
       const newRow = transmitterTableBody.insertRow();
       newRow.id = `transfer-data-row-${rawData.id}${rawData.data.join(" ")}`;
@@ -73,106 +76,147 @@ document.addEventListener("DOMContentLoaded", function () {
       removeCell.innerHTML = `<p onclick="removetablerow('transfer-data-row-${
         rawData.id
       }${rawData.data.join(" ")}', this)">❌</p>`;
-    }
 
-    idInput.value = "";
-    dataInputs.forEach((input) => (input.value = ""));
-    cyclicTimeInput.value = "";
+      newRow.addEventListener("click", () => {
+        populatePopupForEdit(newRow);
+        console.log(newRow);
+      });
+    }
 
     closePopup();
   });
 
-  //----------
-  function updateReceiverTable(data) {
-    const tableBody = document.getElementById("receiver-table-body");
-    const typeOfResponse = document.getElementById("number-type-output").value;
-    let value = null;
+  function populatePopupForEdit(row) {
+    editingRow = row;
+    idInput.value = row.cells[0].textContent;
+    lengthSelect.value = row.cells[1].textContent;
+    const data = row.cells[2].textContent.split(" ");
+    dataInputs.forEach((input, index) => {
+      input.value = data[index] || "";
+    });
+    cyclicTimeInput.value = row.cells[3].textContent;
+    const rowIndex = Array.from(transmitterTableBody.rows).indexOf(row);
+    console.log(`Editing row index: ${rowIndex}`);
+    window.electron.sendRowNumberEditing(rowIndex);
 
-    const { id, timeStamp, binaryData, decimalData, rawData } = data;
-    const idOfResponse = rawData.split("  ")[2];
-
-    // Determine the value to display based on the selected response type
-    switch (typeOfResponse) {
-      case "binaryData":
-        value = binaryData;
-        break;
-      case "decimalData":
-        value = decimalData;
-        break;
-      case "rawData":
-        value = rawData;
-        break;
-      default:
-        console.error("Invalid typeOfResponse:", typeOfResponse);
-        return;
-    }
-
-    const rowId = `new-row-receive-${id}${idOfResponse}`;
-    let existingRow = document.getElementById(rowId);
-    let timeDifference = null;
-
-    if (existingRow) {
-      let existingCountCell = document.getElementById(
-        `receive-data-count-value-${id}${idOfResponse}`
-      );
-      if (!existingCountCell) {
-        console.error("Count cell not found for ID:", rowId);
-        return;
-      }
-
-      const previousTime = new Date(existingRow.cells[0].textContent);
-      const currentTime = new Date(timeStamp);
-      timeDifference = currentTime - previousTime;
-
-      // Update the existing row
-      existingRow.cells[0].textContent = timeStamp;
-      existingRow.cells[2].textContent = rawData.split("  ")[3];
-      existingRow.cells[3].textContent = value.includes("]")
-        ? value.slice(value.indexOf("]") + 1).trim()
-        : value;
-      existingRow.cells[4].textContent = `${timeDifference} ms`;
-      existingRow.cells[5].textContent =
-        parseInt(existingCountCell.textContent, 10) + 1;
-    } else {
-      const newRow = document.createElement("tr");
-      newRow.id = rowId;
-
-      const timeCell = document.createElement("td");
-      timeCell.textContent = timeStamp;
-      newRow.appendChild(timeCell);
-
-      const idCell = document.createElement("td");
-      idCell.textContent = idOfResponse;
-      newRow.appendChild(idCell);
-
-      const lengthCell = document.createElement("td");
-      lengthCell.textContent = rawData.split("  ")[3];
-      newRow.appendChild(lengthCell);
-
-      const dataCell = document.createElement("td");
-      dataCell.textContent = value.includes("]")
-        ? value.slice(value.indexOf("]") + 1).trim()
-        : value;
-      newRow.appendChild(dataCell);
-
-      const intervalCell = document.createElement("td");
-      intervalCell.textContent = timeDifference
-        ? `${timeDifference} ms`
-        : "N/A";
-      newRow.appendChild(intervalCell);
-
-      const countCell = document.createElement("td");
-      countCell.textContent = "1";
-      countCell.id = `receive-data-count-value-${id}${idOfResponse}`;
-      newRow.appendChild(countCell);
-
-      tableBody.appendChild(newRow);
-    }
+    openPopup();
   }
 
-  window.electron.onCANData((data) => {
-    updateReceiverTable(data);
-  });
+  function stopCycle(row) {
+    const rowIndex = Array.from(transmitterTableBody.rows).indexOf(row);
+    window.electron.sendRowNumber(rowIndex);
+    console.log(`Stopping cycle for row index: ${rowIndex}`);
+  }
+});
+
+//----------
+function updateReceiverTable(data) {
+  const tableBody = document.getElementById("receiver-table-body");
+  const typeOfResponse = document.getElementById("number-type-output").value;
+  let value = null;
+
+  const { id, timeStamp, binaryData, decimalData, rawData } = data;
+  console.log("-->", data);
+
+  const idOfResponse = rawData.split("  ")[2];
+  const rowId = `new-row-receive-${id}${idOfResponse}`;
+  let existingRow = document.getElementById(rowId);
+  let timeDifference = null;
+
+  switch (typeOfResponse) {
+    case "binaryData":
+      value = binaryData;
+      break;
+    case "decimalData":
+      value = decimalData;
+      break;
+    case "rawData":
+      value = rawData;
+      break;
+    default:
+      console.error("Invalid typeOfResponse:", typeOfResponse);
+      return;
+  }
+
+  if (existingRow) {
+    // Update existing row
+    const previousTime = new Date(existingRow.cells[0].textContent);
+    const currentTime = new Date(timeStamp);
+    timeDifference = currentTime - previousTime;
+
+    const existingValueCell = existingRow.cells[3];
+    const existingValue = existingValueCell.textContent;
+
+    const newValue = value.includes("]")
+      ? value.slice(value.indexOf("]") + 1).trim()
+      : value;
+
+    // Update time and other cells
+    existingRow.cells[0].textContent = timeStamp;
+    existingRow.cells[2].textContent = rawData.split("  ")[3];
+    existingRow.cells[4].textContent = `${timeDifference} ms`;
+    existingRow.cells[5].textContent =
+      parseInt(existingRow.cells[5].textContent, 10) + 1;
+
+    if (existingValue !== newValue) {
+      const changedPart = getChangedPart(existingValue, newValue);
+      existingValueCell.innerHTML = changedPart;
+    }
+  } else {
+    // Create new row
+    const newRow = document.createElement("tr");
+    newRow.id = rowId;
+
+    const timeCell = document.createElement("td");
+    timeCell.textContent = timeStamp;
+    newRow.appendChild(timeCell);
+
+    const idCell = document.createElement("td");
+    idCell.textContent = idOfResponse;
+    newRow.appendChild(idCell);
+
+    const lengthCell = document.createElement("td");
+    lengthCell.textContent = rawData.split("  ")[3];
+    newRow.appendChild(lengthCell);
+
+    const dataCell = document.createElement("td");
+    dataCell.innerHTML = value.includes("]")
+      ? value.slice(value.indexOf("]") + 1).trim()
+      : value;
+    newRow.appendChild(dataCell);
+
+    const intervalCell = document.createElement("td");
+    intervalCell.textContent = "N/A";
+    newRow.appendChild(intervalCell);
+
+    const countCell = document.createElement("td");
+    countCell.textContent = "1";
+    countCell.id = `receive-data-count-value-${id}${idOfResponse}`;
+    newRow.appendChild(countCell);
+
+    tableBody.appendChild(newRow);
+  }
+}
+
+function getChangedPart(oldValue, newValue) {
+  let html = "";
+  const maxLength = Math.max(oldValue.length, newValue.length);
+
+  for (let i = 0; i < maxLength; i++) {
+    const oldChar = oldValue[i] || "";
+    const newChar = newValue[i] || "";
+
+    if (oldChar === newChar) {
+      html += newChar;
+    } else {
+      html += `<span class="twinkle">${newChar}</span>`;
+    }
+  }
+  return html;
+}
+
+window.electron.onCANData((data) => {
+  updateReceiverTable(data);
 });
 
 window.electron.onCANerror((data) => {
