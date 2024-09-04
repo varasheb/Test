@@ -89,9 +89,9 @@ document.addEventListener("DOMContentLoaded", function () {
     let value = null;
 
     const { id, timeStamp, binaryData, decimalData, rawData } = data;
-    console.log(data);
     const idOfResponse = rawData.split("  ")[2];
 
+    // Determine the value to display based on the selected response type
     switch (typeOfResponse) {
       case "binaryData":
         value = binaryData;
@@ -109,6 +109,7 @@ document.addEventListener("DOMContentLoaded", function () {
 
     const rowId = `new-row-receive-${id}${idOfResponse}`;
     let existingRow = document.getElementById(rowId);
+    let timeDifference = null;
 
     if (existingRow) {
       let existingCountCell = document.getElementById(
@@ -118,14 +119,20 @@ document.addEventListener("DOMContentLoaded", function () {
         console.error("Count cell not found for ID:", rowId);
         return;
       }
-      let existingCount = parseInt(existingCountCell.textContent, 10) || 0;
 
+      const previousTime = new Date(existingRow.cells[0].textContent);
+      const currentTime = new Date(timeStamp);
+      timeDifference = currentTime - previousTime;
+
+      // Update the existing row
       existingRow.cells[0].textContent = timeStamp;
       existingRow.cells[2].textContent = rawData.split("  ")[3];
       existingRow.cells[3].textContent = value.includes("]")
         ? value.slice(value.indexOf("]") + 1).trim()
         : value;
-      existingRow.cells[5].textContent = existingCount + 1;
+      existingRow.cells[4].textContent = `${timeDifference} ms`;
+      existingRow.cells[5].textContent =
+        parseInt(existingCountCell.textContent, 10) + 1;
     } else {
       const newRow = document.createElement("tr");
       newRow.id = rowId;
@@ -149,13 +156,16 @@ document.addEventListener("DOMContentLoaded", function () {
       newRow.appendChild(dataCell);
 
       const intervalCell = document.createElement("td");
-      intervalCell.textContent = data.cyclicTime || "";
+      intervalCell.textContent = timeDifference
+        ? `${timeDifference} ms`
+        : "N/A";
       newRow.appendChild(intervalCell);
 
       const countCell = document.createElement("td");
       countCell.textContent = "1";
       countCell.id = `receive-data-count-value-${id}${idOfResponse}`;
       newRow.appendChild(countCell);
+
       tableBody.appendChild(newRow);
     }
   }
