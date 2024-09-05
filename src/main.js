@@ -42,17 +42,21 @@ ipcMain.on("send-pid", (event, pid) => {
   sendCanRequest("7DF", `0201${pid}0000000000`);
 });
 
+// ipcMain.on("send-raw-can-data", (event, rawData) => {
+//   const hexdata = rawData.data.join("");
+//   cyclicTime = parseInt(rawData.cyclicTime);
+
+//   if (cyclicTime >= 100) {
+//     const intervalID = setInterval(() => {
+//       sendCanRequest(rawData.id, hexdata);
+//     }, cyclicTime);
+
+//     cycleInterval.push(intervalID);
+//   }
+// });
 ipcMain.on("send-raw-can-data", (event, rawData) => {
   const hexdata = rawData.data.join("");
-  cyclicTime = parseInt(rawData.cyclicTime);
-
-  if (cyclicTime >= 1000) {
-    const intervalID = setInterval(() => {
-      sendCanRequest(rawData.id, hexdata);
-    }, cyclicTime);
-
-    cycleInterval.push(intervalID);
-  }
+  sendCanRequest(rawData.id, hexdata);
 });
 
 ipcMain.on("stop-cyclic-request", (event, rowId) => {
@@ -81,7 +85,8 @@ ipcMain.on("stop-Obd2-request", (event, data) => {
 
 //======================================================
 
-const canChannel = "can0";
+// const canChannel = "can0";
+const canChannel = "vcan0";
 const candump = spawn("candump", [canChannel]);
 
 candump.stdout.on("data", (data) => {
