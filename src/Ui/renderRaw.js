@@ -1,5 +1,20 @@
 //start
 
+let transferRows = [];
+function storeOrUpdateTransferRow(rowId, rawData) {
+  const existingRowIndex = transferRows.findIndex(row => row.rowId === rowId);
+
+  if (existingRowIndex !== -1) {
+    transferRows[existingRowIndex] = rawData;
+  } else {
+    transferRows.push(rawData);
+  }
+
+
+  console.log("Updated transferRows array:", transferRows);
+}
+
+
 let countid = 0;
 function getRowId() {
   if (countid == 0) {
@@ -8,6 +23,7 @@ function getRowId() {
   }
   return countid++;
 }
+
 
 document.addEventListener("DOMContentLoaded", function () {
   const addRequestBtn = document.getElementById("rawdata-btn2");
@@ -70,6 +86,15 @@ document.addEventListener("DOMContentLoaded", function () {
       editingRow.cells[2].textContent = rawData.data.join(" ");
       editingRow.cells[3].textContent = rawData.cyclicTime;
       // stopCycle(editingRow.id);
+
+      const updatedRowData = {
+        rowId: editingRow.id,
+        id: rawData.id,
+        length: rawData.length,
+        data: rawData.data.join(" "),
+        cyclicTime: rawData.cyclicTime
+      };
+      storeOrUpdateTransferRow(editingRow.id, updatedRowData);
       editCycle(editingRow);
     } else {
       const newRow = transmitterTableBody.insertRow();
@@ -80,13 +105,26 @@ document.addEventListener("DOMContentLoaded", function () {
       newRow.insertCell(3).textContent = rawData.cyclicTime;
       const removeCell = newRow.insertCell(4);
       removeCell.innerHTML = `<p onclick="removetablerow('${newRow.id}', this)">❌</p>`;
+
+      const newRowData = {
+        rowId: newRow.id,
+        id: rawData.id,
+        length: rawData.length,
+        data: rawData.data.join(" "),
+        cyclicTime: rawData.cyclicTime
+      };
+      storeOrUpdateTransferRow(newRow.id, newRowData);
+
+
       startCycle(rawData);
       newRow.cells[2].addEventListener("click", () => {
         populatePopupForEdit(newRow);
         console.log(newRow);
       });
       console.log(newRow);
+
     }
+
 
     closePopup();
   });
@@ -260,6 +298,7 @@ function removetablerow(row, element) {
   if (rowToRemove) {
     window.electron.sendRowNumber(row);
     // console.log(`Removing row at index: ${rowIndex}`);
+    storeOrUpdateTransferRow(row.id)
     rowToRemove.remove();
   } else {
     console.log(`Row not found.`);
