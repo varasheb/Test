@@ -275,13 +275,23 @@ function validateHex(input) {
     input.value = input.value.slice(0, -1);
   }
 }
-
+let idTimeout;
 function validateId(input) {
   input.value = input.value.toUpperCase();
+
   const hexPattern = /^[0-9A-F]{0,8}$/;
   if (!hexPattern.test(input.value)) {
     input.value = input.value.slice(0, -1);
   }
+
+  clearTimeout(idTimeout);
+  idTimeout = setTimeout(() => {
+    if (input.value.length > 0 && input.value.length < 3) {
+      input.value = input.value.padStart(3, "0");
+    } else if (input.value.length > 3 && input.value.length < 8) {
+      input.value = input.value.padStart(8, "0");
+    }
+  }, 1000);
 }
 
 function removetablerow(row, element) {
