@@ -1,5 +1,13 @@
 //start
-let cycleInterval = [];
+
+let countid = 0;
+function getRowId() {
+  if (countid == 0) {
+    countid++;
+    return 0;
+  }
+  return countid++;
+}
 
 document.addEventListener("DOMContentLoaded", function () {
   const addRequestBtn = document.getElementById("rawdata-btn2");
@@ -56,24 +64,23 @@ document.addEventListener("DOMContentLoaded", function () {
     });
     rawData.cyclicTime = cyclicTimeInput.value;
     //-----------------------------------------------------------------------------
-    startCycle(rawData);
-
     if (editingRow) {
       editingRow.cells[0].textContent = rawData.id;
       editingRow.cells[1].textContent = rawData.length;
       editingRow.cells[2].textContent = rawData.data.join(" ");
       editingRow.cells[3].textContent = rawData.cyclicTime;
-      stopCycle(editingRow);
+      // stopCycle(editingRow.id);
+      editCycle(editingRow);
     } else {
       const newRow = transmitterTableBody.insertRow();
-      newRow.id = cycleInterval.length - 1;
+      newRow.id = getRowId();
       newRow.insertCell(0).textContent = rawData.id;
       newRow.insertCell(1).textContent = rawData.length;
       newRow.insertCell(2).textContent = rawData.data.join(" ");
       newRow.insertCell(3).textContent = rawData.cyclicTime;
       const removeCell = newRow.insertCell(4);
       removeCell.innerHTML = `<p onclick="removetablerow('${newRow.id}', this)">❌</p>`;
-
+      startCycle(rawData);
       newRow.cells[2].addEventListener("click", () => {
         populatePopupForEdit(newRow);
         console.log(newRow);
@@ -93,53 +100,29 @@ document.addEventListener("DOMContentLoaded", function () {
       input.value = data[index] || "";
     });
     cyclicTimeInput.value = row.cells[3].textContent;
-    editCycle(row.id);
+
+    // editCycle(rawdata);
     console.log(`Editing row index: ${row.id}`);
 
     openPopup();
   }
 
   function stopCycle(row) {
-    console.log(row, cycleInterval);
-    const rowIndex = row.id;
-    const intervalID = cycleInterval[rowIndex];
-
-    if (intervalID) {
-      clearInterval(intervalID);
-      cycleInterval.splice(rowIndex, 1);
-    } else {
-      console.log(`No cyclic request found for row ID: ${rowIndex}`);
-    }
-    console.log(`Stopping cycle for row index: ${rowIndex}`);
+    window.electron.sendRowNumber(row.id);
   }
 
   function startCycle(rawData) {
-    cyclicTime = parseInt(rawData.cyclicTime);
-    if (cyclicTime >= 100) {
-      const intervalID = setInterval(() => {
-        window.electron.sendRawCANData(rawData);
-      }, cyclicTime);
-
-      cycleInterval.push(intervalID);
-    }
+    window.electron.sendRawCANData(rawData);
   }
   function editCycle(row) {
-    const rowIndex = row.id;
-    const intervalID = cycleInterval[rowIndex];
-
-    if (intervalID) {
-      clearInterval(intervalID);
-      cyclicTime = parseInt(rawData.cyclicTime);
-      if (cyclicTime >= 100) {
-        const intervalID = setInterval(() => {
-          window.electron.sendRawCANData(rawData);
-        }, cyclicTime);
-        cycleInterval.splice(rowIndex, 1, intervalID);
-      }
-    } else {
-      console.log(`No cyclic request found for row ID: ${rowIndex}`);
-    }
-    console.log(`edit cycle for row index: ${rowIndex}`);
+    const rawdata = {
+      rowId: row.id,
+      cyclicTime: row.cells[3].textContent.trim(),
+      id: row.cells[0].textContent.trim(),
+      hexdata: row.cells[2].textContent.trim(),
+    };
+    console.log(rawdata);
+    window.electron.sendRowNumberEditing(rawdata);
   }
 });
 
@@ -173,7 +156,6 @@ function updateReceiverTable(data) {
   }
 
   if (existingRow) {
-    // Update existing row
     const previousTime = new Date(existingRow.cells[0].textContent);
     const currentTime = new Date(timeStamp);
     timeDifference = currentTime - previousTime;
@@ -185,7 +167,6 @@ function updateReceiverTable(data) {
       ? value.slice(value.indexOf("]") + 1).trim()
       : value;
 
-    // Update time and other cells
     existingRow.cells[0].textContent = timeStamp;
     existingRow.cells[2].textContent = rawData.split("  ")[3];
     existingRow.cells[4].textContent = `${timeDifference} ms`;
@@ -277,18 +258,8 @@ function removetablerow(row, element) {
   const rowToRemove = element.closest("tr");
   console.log("0--", row);
   if (rowToRemove) {
-    const rowIndex = row;
-    const intervalID = cycleInterval[rowIndex];
-
-    if (intervalID) {
-      clearInterval(intervalID);
-      cycleInterval.splice(rowIndex, 1);
-    } else {
-      console.log(`No cyclic request found for row ID: ${rowIndex}`);
-    }
-    console.log(`Stopping cycle for row index: ${rowIndex}`);
-
-    console.log(`Removing row at index: ${rowIndex}`);
+    window.electron.sendRowNumber(row);
+    // console.log(`Removing row at index: ${rowIndex}`);
     rowToRemove.remove();
   } else {
     console.log(`Row not found.`);

@@ -42,21 +42,17 @@ ipcMain.on("send-pid", (event, pid) => {
   sendCanRequest("7DF", `0201${pid}0000000000`);
 });
 
-// ipcMain.on("send-raw-can-data", (event, rawData) => {
-//   const hexdata = rawData.data.join("");
-//   cyclicTime = parseInt(rawData.cyclicTime);
-
-//   if (cyclicTime >= 100) {
-//     const intervalID = setInterval(() => {
-//       sendCanRequest(rawData.id, hexdata);
-//     }, cyclicTime);
-
-//     cycleInterval.push(intervalID);
-//   }
-// });
 ipcMain.on("send-raw-can-data", (event, rawData) => {
   const hexdata = rawData.data.join("");
-  sendCanRequest(rawData.id, hexdata);
+  cyclicTime = parseInt(rawData.cyclicTime);
+
+  if (cyclicTime >= 100) {
+    const intervalID = setInterval(() => {
+      sendCanRequest(rawData.id, hexdata);
+    }, cyclicTime);
+
+    cycleInterval.push(intervalID);
+  }
 });
 
 ipcMain.on("stop-cyclic-request", (event, rowId) => {
@@ -64,16 +60,28 @@ ipcMain.on("stop-cyclic-request", (event, rowId) => {
 
   if (intervalID) {
     clearInterval(intervalID);
-    cycleInterval.splice(rowId, 1);
+    cycleInterval[rowId] = null;
   } else {
     console.log(`No cyclic request found for row ID: ${rowId}`);
   }
 });
 
-ipcMain.on("stop-cyclic-request-edit", (event, rowId) => {
-  if (rowId > 0) {
-    const intervalID = cycleInterval.pop();
-    cycleInterval.splice(rowId, 0, intervalID);
+ipcMain.on("stop-cyclic-request-edit", (event, data) => {
+  const { rowId, cyclicTime, id, hexdata } = data;
+  console.log(data);
+  if (rowId >= 0) {
+    const intervalID = cycleInterval[rowId];
+    clearInterval(intervalID);
+
+    if (cyclicTime >= 100) {
+      const newInterval = setInterval(() => {
+        sendCanRequest(id, hexdata.split(" ").join(""));
+      }, cyclicTime);
+
+      cycleInterval[rowId] = newInterval;
+      console.log("----------------+++++++", cycleInterval);
+    }
+
     console.log("edited", rowId);
   }
 });
