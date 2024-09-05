@@ -1,5 +1,18 @@
 //start
 
+let transferRows = [];
+function storeOrUpdateTransferRow(rowId, rawData) {
+  const existingRowIndex = transferRows.findIndex((row) => row.rowId === rowId);
+
+  if (existingRowIndex !== -1) {
+    transferRows[existingRowIndex] = rawData;
+  } else {
+    transferRows.push(rawData);
+  }
+
+  console.log("Updated transferRows array:", transferRows);
+}
+
 let countid = 0;
 function getRowId() {
   if (countid == 0) {
@@ -69,6 +82,16 @@ document.addEventListener("DOMContentLoaded", function () {
       editingRow.cells[1].textContent = rawData.length;
       editingRow.cells[2].textContent = rawData.data.join(" ");
       editingRow.cells[3].textContent = rawData.cyclicTime;
+
+      const updatedRowData = {
+        rowId: editingRow.id,
+        id: rawData.id,
+        length: rawData.length,
+        hexdata: rawData.data.join(" "),
+        cyclicTime: rawData.cyclicTime,
+      };
+      storeOrUpdateTransferRow(editingRow.id, updatedRowData);
+
       editCycle(editingRow);
     } else {
       const newRow = transmitterTableBody.insertRow();
@@ -79,6 +102,14 @@ document.addEventListener("DOMContentLoaded", function () {
       newRow.insertCell(3).textContent = rawData.cyclicTime;
       const removeCell = newRow.insertCell(4);
       removeCell.innerHTML = `<p onclick="removetablerow('${newRow.id}', this)">❌</p>`;
+      const newRowData = {
+        rowId: newRow.id,
+        id: rawData.id,
+        length: rawData.length,
+        hexdata: rawData.data.join(" "),
+        cyclicTime: rawData.cyclicTime,
+      };
+      storeOrUpdateTransferRow(newRow.id, newRowData);
       startCycle(rawData);
       newRow.cells[2].addEventListener("click", () => {
         populatePopupForEdit(newRow);
@@ -278,7 +309,6 @@ document
   });
 
 const toggleAction = document.querySelector(".rawdata-toggle-btn");
-// const toggleIcon = document.querySelector("#toggle-icon");
 const toggleText = document.querySelector(".rawdata-toggle-btn-txt");
 
 toggleAction.addEventListener("click", function () {
@@ -288,6 +318,14 @@ toggleAction.addEventListener("click", function () {
     console.log("pause button is clicked");
   } else {
     toggleText.textContent = "⏸︎ Pause";
+    unfreezData();
     console.log("resume button is clicked");
   }
 });
+
+function unfreezData() {
+  transferRows.map((data) => {
+    console.log(data);
+    window.electron.sendRowNumberEditing(data);
+  });
+}
