@@ -61,6 +61,40 @@
     font-size: 15px;
   }
 }
+.rawdata-refresh-cnt{
+  width: 60%;
+display: flex;
+justify-content: flex-end;
+
+}
+
+.rawdata-refresh{
+  margin-right: 40px;
+  display: flex;
+  /* margin-left: 1000px; */
+}
+
+.rawdata-refresh-btn{
+  width: 120px;
+  height: 45px;
+  background-color: #bef5c0;
+  color: black;
+  border: 3px solid black;
+  border-radius: 5px;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  gap: 10px;
+
+  .rawdata-refresh-btn-txt {
+      font-weight: 600;
+      font-size: 15px;
+    }
+
+    .rawdata-refresh-btn-icon{
+      font-size: 15px;
+    }
+}
 
 .rawdata-receive-main-cnt {
   width: 100%;

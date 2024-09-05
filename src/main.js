@@ -6,6 +6,7 @@ import { spawn } from "child_process";
 import { decodeFrame } from "./decodeframe.js";
 import { sendCanRequest, stopInterval } from "./sendRequest.js";
 import { HexConverter } from "./decodeRawFrame.js";
+import { log } from "console";
 
 const __dirname = dirname(fileURLToPath(import.meta.url));
 let mainWindow;
@@ -94,6 +95,10 @@ candump.stdout.on("data", (data) => {
       const timeStamp = new Date().toISOString();
       const binaryData = HexConverter.hexToBinary(frame);
       const decimalData = HexConverter.hexToDecimal(frame);
+      console.log("-->", {
+        // ...decodedResult,
+        decimalData,
+      });
       mainWindow.webContents.send("can-data", {
         timeStamp,
         ...decodedResult,

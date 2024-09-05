@@ -43,6 +43,12 @@ document.addEventListener("DOMContentLoaded", function () {
       closePopup();
     }
   });
+  document
+    .querySelector(".rawdata-refresh-btn")
+    .addEventListener("click", function () {
+      console.log("refresh button is clicked");
+      document.querySelector(".count-class").textContent = "0";
+    });
 
   startBtn.addEventListener("click", function () {
     rawData.id = idInput.value;
@@ -190,6 +196,7 @@ function updateReceiverTable(data) {
     newRow.appendChild(intervalCell);
 
     const countCell = document.createElement("td");
+    countCell.classList.add("count-class");
     countCell.textContent = "1";
     countCell.id = `receive-data-count-value-${id}${idOfResponse}`;
     newRow.appendChild(countCell);
