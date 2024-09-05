@@ -276,3 +276,18 @@ document
       ele.textContent = "0";
     });
   });
+
+const toggleAction = document.querySelector(".rawdata-toggle-btn");
+// const toggleIcon = document.querySelector("#toggle-icon");
+const toggleText = document.querySelector(".rawdata-toggle-btn-txt");
+
+toggleAction.addEventListener("click", function () {
+  if (toggleText.textContent === "⏸︎ Pause") {
+    toggleText.textContent = "⏵︎ Resume";
+    window.electron.sendRefreshRawCan();
+    console.log("pause button is clicked");
+  } else {
+    toggleText.textContent = "⏸︎ Pause";
+    console.log("resume button is clicked");
+  }
+});

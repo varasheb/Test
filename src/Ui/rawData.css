@@ -419,7 +419,7 @@ thead th {
 
 /* css for refresh button */
 .rawdata-refresh-cnt {
-  width: 60%;
+  width: 54%;
   display: flex;
   justify-content: flex-end;
 }
@@ -448,6 +448,40 @@ thead th {
   }
 
   .rawdata-refresh-btn-icon {
+    font-size: 15px;
+  }
+}
+
+.rawdata-toggle-cnt {
+  /* width: 60%; */
+  display: flex;
+  justify-content: flex-end;
+}
+
+.rawdata-toggle {
+  margin-right: 40px;
+  display: flex;
+  /* margin-left: 1000px; */
+}
+
+.rawdata-toggle-btn {
+  width: 120px;
+  height: 45px;
+  background-color: #bef5c0;
+  color: black;
+  border: 3px solid black;
+  border-radius: 5px;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  gap: 10px;
+
+  .rawdata-toggle-btn-txt {
+    font-weight: 600;
+    font-size: 15px;
+  }
+
+  .rawdata-toggle-btn-icon {
     font-size: 15px;
   }
 }
