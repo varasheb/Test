@@ -69,7 +69,6 @@ document.addEventListener("DOMContentLoaded", function () {
       editingRow.cells[1].textContent = rawData.length;
       editingRow.cells[2].textContent = rawData.data.join(" ");
       editingRow.cells[3].textContent = rawData.cyclicTime;
-      // stopCycle(editingRow.id);
       editCycle(editingRow);
     } else {
       const newRow = transmitterTableBody.insertRow();
@@ -101,7 +100,6 @@ document.addEventListener("DOMContentLoaded", function () {
     });
     cyclicTimeInput.value = row.cells[3].textContent;
 
-    // editCycle(rawdata);
     console.log(`Editing row index: ${row.id}`);
 
     openPopup();
@@ -205,6 +203,7 @@ function updateReceiverTable(data) {
     newRow.appendChild(intervalCell);
 
     const countCell = document.createElement("td");
+    countCell.classList.add("count-class");
     countCell.textContent = "1";
     countCell.id = `receive-data-count-value-${id}${idOfResponse}`;
     newRow.appendChild(countCell);
@@ -265,3 +264,15 @@ function removetablerow(row, element) {
     console.log(`Row not found.`);
   }
 }
+
+document
+  .querySelector(".rawdata-refresh-btn")
+  .addEventListener("click", function () {
+    console.log("refresh button is clicked");
+    const allCounts = document.querySelectorAll(
+      " #receiver-table-body .count-class"
+    );
+    allCounts.forEach(function (ele) {
+      ele.textContent = "0";
+    });
+  });

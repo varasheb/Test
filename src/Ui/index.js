@@ -8,6 +8,9 @@ function closePopup() {
 }
 
 addRequestBtn.addEventListener("click", function () {
+  console.log("open");
+  window.electron.sendRefreshRawCan();
+  console.log("close");
   openPopup();
 });
 

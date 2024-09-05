@@ -66,6 +66,13 @@ ipcMain.on("stop-cyclic-request", (event, rowId) => {
   }
 });
 
+ipcMain.on("stop-all-the-cycle", (event, data) => {
+  cycleInterval.map((intervalId) => {
+    clearInterval(intervalId);
+  });
+  console.log("Called Refresh", data);
+});
+
 ipcMain.on("stop-cyclic-request-edit", (event, data) => {
   const { rowId, cyclicTime, id, hexdata } = data;
   console.log(data);
