@@ -100,3 +100,11 @@ button {
   width: 80px;
   margin-bottom: 30px;
 }
+
+#home-navbar-btn3 {
+  background-color: rgb(43, 235, 14);
+  border: 3px solid black;
+  border-radius: 5px;
+  color: black;
+  font-weight: 600;
+}
