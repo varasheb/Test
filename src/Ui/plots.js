@@ -1,13 +1,26 @@
 document.addEventListener("DOMContentLoaded", function () {
   let count = 0;
+  let isRunning = true;
   const plotsData = [];
   let graphData = [];
   const btn = document.getElementById("plots-add-btn");
   const popup = document.getElementById("popup");
   const addPlot = document.getElementById("plots-add-btn1");
+  const startButton = document.getElementById("plots-start");
+  const freezeButton = document.getElementById("plots-freez");
 
   addPlot.addEventListener("click", addValue);
   btn.addEventListener("click", openPopup);
+
+  startButton.addEventListener("click", () => {
+    isRunning = true;
+    console.log("Graph updates resumed.");
+  });
+
+  freezeButton.addEventListener("click", () => {
+    isRunning = false;
+    console.log("Graph updates paused.");
+  });
 
   window.addEventListener("click", function (event) {
     if (event.target === popup) {
@@ -95,6 +108,8 @@ document.addEventListener("DOMContentLoaded", function () {
     });
 
     function updateChart(value) {
+      if (!isRunning) return;
+
       const now = new Date();
       const timeStr = `${now.getHours()}:${now.getMinutes()}:${now.getSeconds()}`;
 
@@ -109,7 +124,6 @@ document.addEventListener("DOMContentLoaded", function () {
       myChart.update();
     }
 
-    // Modify the listener to update the chart only for the specific orbId
     window.electron.onCANData((data) => {
       const receivedData = data?.decimalData;
       const receivedId = receivedData.split(" ")[1];
@@ -119,7 +133,6 @@ document.addEventListener("DOMContentLoaded", function () {
         return;
       }
 
-      // Check if the receivedId matches the chart's id
       if (receivedId === id) {
         const value = addingValue(receivedId);
         if (value) {
@@ -156,7 +169,6 @@ document.addEventListener("DOMContentLoaded", function () {
 
   function addValue() {
     const newOrbId = document.getElementById("new-orbId").value;
-    // const interval = document.getElementById("plot-interval").value;
     const comment = document.getElementById("add-plot-comment-data").value;
 
     if (newOrbId.trim() === "") {
@@ -184,7 +196,8 @@ document.addEventListener("DOMContentLoaded", function () {
   }
 
   window.electron.onCANData((data) => {
-    console.log(data);
+    if (!isRunning) return;
+
     const newValue = data?.decimalData;
     const id = data?.decimalData.split(" ")[1];
 
