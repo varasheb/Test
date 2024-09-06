@@ -6,6 +6,7 @@ import { spawn } from "child_process";
 import { decodeFrame } from "./decodeframe.js";
 import { sendCanRequest, stopInterval } from "./sendRequest.js";
 import { HexConverter } from "./decodeRawFrame.js";
+import { setupCAN } from "./canConnect.js";
 
 const __dirname = dirname(fileURLToPath(import.meta.url));
 let mainWindow;
@@ -98,10 +99,15 @@ ipcMain.on("stop-Obd2-request", (event, data) => {
   console.log("Stop The obd2 cycles");
 });
 
+ipcMain.on("send-baurdRate", (event, baudRate) => {
+  const bitrate = baudRate + "000";
+  // setupCAN(bitrate);
+  console.log("Set Bit rate", bitrate);
+});
 //======================================================
 
-// const canChannel = "can0";
-const canChannel = "vcan0";
+const canChannel = "can0";
+// const canChannel = "vcan0";
 const candump = spawn("candump", [canChannel]);
 
 candump.stdout.on("data", (data) => {

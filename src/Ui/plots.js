@@ -5,15 +5,22 @@ document.addEventListener("DOMContentLoaded", function () {
   const btn = document.getElementById("plots-add-btn");
   const popup = document.getElementById("popup");
   const addPlot = document.getElementById("plots-add-btn1");
+  const freezeBtn = document.getElementById("plots-freeze-btn");
+  const resumeBtn = document.getElementById("plots-resume-btn");
+  let intervals = []; // Array to store interval IDs
+  let isFrozen = false; // Flag to check if the graphs are frozen
 
   addPlot.addEventListener("click", addValue);
   btn.addEventListener("click", openPopup);
+  freezeBtn.addEventListener("click", freezeGraphs);
+  resumeBtn.addEventListener("click", resumeGraphs);
 
   window.addEventListener("click", function (event) {
     if (event.target === popup) {
       closePopup();
     }
   });
+
   window.removeplot = function (id) {
     const elementToRemove = document.getElementById(id);
     if (elementToRemove) {
@@ -22,6 +29,7 @@ document.addEventListener("DOMContentLoaded", function () {
       console.error("Element not found.");
     }
   };
+
   function addNewPlot(id) {
     const plotData = plotsData.find((plot) => plot.orbId === id);
     if (plotData) {
@@ -30,18 +38,18 @@ document.addEventListener("DOMContentLoaded", function () {
       newPlot.classList.add("plots-main-graph-inner-cnt");
       newPlot.id = `${++count}`;
       newPlot.innerHTML = `
-                <div class="plots-main-graph-inner-comment-cnt">
-                    <p>${plotData.comment}</p>
-                </div>
-                <div class="plots-main-graph-inner-graph-cnt">
-                    <div class="card-body graph-main-cnt">
-                        <canvas id="myChart${plotData.orbId}" class='mychart'></canvas>
-                    </div>
-                    <div class="plots-main-graph-inner-graph-edit-cnt">
-                        <button onclick="removeplot('${count}')">Close</button>
-                    </div>
-                </div>
-            `;
+        <div class="plots-main-graph-inner-comment-cnt">
+            <p>${plotData.comment}</p>
+        </div>
+        <div class="plots-main-graph-inner-graph-cnt">
+            <div class="card-body graph-main-cnt">
+                <canvas id="myChart${plotData.orbId}" class='mychart'></canvas>
+            </div>
+            <div class="plots-main-graph-inner-graph-edit-cnt">
+                <button onclick="removeplot('${count}')">Close</button>
+            </div>
+        </div>
+      `;
       closePopup();
       document.querySelector(".plots-main-graph-main-cnt").appendChild(newPlot);
       callChart(plotData.orbId, plotData.interval);
@@ -51,9 +59,11 @@ document.addEventListener("DOMContentLoaded", function () {
   function openPopup() {
     popup.style.visibility = "visible";
   }
+
   function closePopup() {
     popup.style.visibility = "hidden";
   }
+
   function callChart(id, interval) {
     const ctx = document.getElementById(`myChart${id}`).getContext("2d");
     const down = (ctx) =>
@@ -67,7 +77,7 @@ document.addEventListener("DOMContentLoaded", function () {
       labels: [0],
       datasets: [
         {
-          label: name,
+          label: id,
           data: [0],
           borderWidth: 2,
           lineTension: 0.5,
@@ -94,7 +104,6 @@ document.addEventListener("DOMContentLoaded", function () {
     function updateChart() {
       const now = new Date();
       const value = addingValue(id);
-      //   console.log(value);
       if (value) {
         const timeStr = `${now.getHours()}:${now.getMinutes()}:${now.getSeconds()}`;
 
@@ -110,19 +119,38 @@ document.addEventListener("DOMContentLoaded", function () {
       }
     }
 
-    window.setInterval(updateChart, parseInt(interval));
+    // Store the interval ID for potential later use
+    const intervalId = window.setInterval(updateChart, parseInt(interval));
+    intervals.push(intervalId);
+  }
+
+  function freezeGraphs() {
+    if (isFrozen) return;
+    isFrozen = true;
+    intervals.forEach(clearInterval); // Stop all intervals
+  }
+
+  function resumeGraphs() {
+    if (!isFrozen) return;
+    isFrozen = false;
+    // Restart intervals for all active charts
+    document.querySelectorAll(".mychart").forEach((chart, index) => {
+      const id = chart.id.replace("myChart", "");
+      const interval =
+        plotsData.find((plot) => plot.orbId === id)?.interval || 1000;
+      const intervalId = window.setInterval(
+        () => callChart(id, interval),
+        parseInt(interval)
+      );
+      intervals.push(intervalId);
+    });
   }
 
   function addingValue(id) {
-    // console.log(id);
-    // console.log(graphData);
-
     const data = graphData.find((item) => item.split(" ")[1] == id);
     if (data) {
-      console.log("plot data", data.split(" ")[3]);
       return data.split(" ")[3];
     } else {
-      console.log("Oopss no id found");
       return 0;
     }
   }
@@ -164,18 +192,11 @@ document.addEventListener("DOMContentLoaded", function () {
     }
   }
 
-  //   function filterSelection(data) {
-  //     function sendDataToAdd() {
-  //       return data;
-  //     }
-  //   }
   window.electron.onCANData((data) => {
-    console.log(data);
     const newValue = data?.decimalData;
     const id = data?.decimalData.split(" ")[1];
 
     if (!id || !newValue) {
-      console.log("Invalid data received");
       return;
     }
     const index = graphData.findIndex((item) => item.split(" ")[1] === id);
@@ -189,8 +210,6 @@ document.addEventListener("DOMContentLoaded", function () {
     if (graphData.length > 60) {
       graphData.shift();
     }
-
-    console.log(graphData);
   });
 
   populateSelect();

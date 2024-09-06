@@ -16,6 +16,9 @@ contextBridge.exposeInMainWorld("electron", {
   sendRowNumberEditing: (data) => {
     ipcRenderer.send("stop-cyclic-request-edit", data);
   },
+  setBaudRate: (baudRate) => {
+    ipcRenderer.send("send-baurdRate", baudRate);
+  },
   sendRefreshRawCan: () => {
     ipcRenderer.send("stop-all-the-cycle", "stop all Raw Can Data");
   },

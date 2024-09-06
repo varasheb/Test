@@ -1,9 +1,7 @@
 import { spawn } from "child_process";
 
-export function setupCAN() {
+export function setupCAN(bitrate) {
   const canChannel = "can0";
-  const bitrate = "500000";
-
   const linkSetUp = spawn("ip", [
     "link",
     "set",
