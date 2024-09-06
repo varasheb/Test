@@ -15,6 +15,19 @@ document.addEventListener("DOMContentLoaded", function () {
   startButton.addEventListener("click", () => {
     isRunning = true;
     console.log("Graph updates resumed.");
+
+    graphData = [];
+    const chartContainers = document.querySelectorAll(".mychart");
+
+    chartContainers.forEach((chartContainer) => {
+      const ctx = chartContainer.getContext("2d");
+      const chartInstance = Chart.getChart(ctx);
+      if (chartInstance) {
+        chartInstance.data.labels = [];
+        chartInstance.data.datasets[0].data = [];
+        chartInstance.update();
+      }
+    });
   });
 
   freezeButton.addEventListener("click", () => {
