@@ -57,7 +57,6 @@ document.addEventListener("DOMContentLoaded", function () {
   function closePopup() {
     popup.style.visibility = "hidden";
   }
-
   function callChart(id) {
     const ctx = document.getElementById(`myChart${id}`).getContext("2d");
     const down = (ctx) =>
@@ -110,19 +109,19 @@ document.addEventListener("DOMContentLoaded", function () {
       myChart.update();
     }
 
+    // Modify the listener to update the chart only for the specific orbId
     window.electron.onCANData((data) => {
-      console.log(data);
-      const newValue = data?.decimalData;
-      const id = data?.decimalData.split(" ")[1];
+      const receivedData = data?.decimalData;
+      const receivedId = receivedData.split(" ")[1];
 
-      if (!id || !newValue) {
+      if (!receivedId || !receivedData) {
         console.log("Invalid data received");
         return;
       }
 
-      const plotData = plotsData.find((plot) => plot.orbId === id);
-      if (plotData) {
-        const value = addingValue(id);
+      // Check if the receivedId matches the chart's id
+      if (receivedId === id) {
+        const value = addingValue(receivedId);
         if (value) {
           updateChart(value);
         }
@@ -146,17 +145,18 @@ document.addEventListener("DOMContentLoaded", function () {
     defaultOption.value = "";
     defaultOption.textContent = "Select the plot";
     selectElement.appendChild(defaultOption);
+
     plotsData.forEach((plot) => {
       const option = document.createElement("option");
       option.value = plot.orbId;
-      option.textContent = plot.orbId;
+      option.textContent = plot.comment;
       selectElement.appendChild(option);
     });
   }
 
   function addValue() {
     const newOrbId = document.getElementById("new-orbId").value;
-    const interval = document.getElementById("plot-interval").value;
+    // const interval = document.getElementById("plot-interval").value;
     const comment = document.getElementById("add-plot-comment-data").value;
 
     if (newOrbId.trim() === "") {
@@ -170,7 +170,7 @@ document.addEventListener("DOMContentLoaded", function () {
       paddedOrbId = newOrbId.padStart(8, "0");
     }
 
-    plotsData.push({ orbId: paddedOrbId, comment: comment, interval });
+    plotsData.push({ orbId: paddedOrbId, comment: comment });
     populateSelect();
     document.getElementById("new-orbId").value = "";
     closePopup();
