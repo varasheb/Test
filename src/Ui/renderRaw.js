@@ -67,7 +67,13 @@ document.addEventListener("DOMContentLoaded", function () {
   });
 
   startBtn.addEventListener("click", function () {
-    rawData.id = idInput.value;
+    if (idInput.value.length === 3 || idInput.value.length === 8) {
+      rawData.id = idInput.value;
+    } else if (idInput.value.length < 3) {
+      rawData.id = idInput.value.padStart(3, "0");
+    } else if (idInput.value.length > 3 && idInput.value.length < 8) {
+      rawData.id = idInput.value.padStart(8, "0");
+    }
     rawData.length = lengthSelect.value;
     rawData.data = Array.from(dataInputs).map((input) => {
       if (input.value) {
@@ -275,7 +281,7 @@ function validateHex(input) {
     input.value = input.value.slice(0, -1);
   }
 }
-let idTimeout;
+
 function validateId(input) {
   input.value = input.value.toUpperCase();
 
@@ -283,15 +289,6 @@ function validateId(input) {
   if (!hexPattern.test(input.value)) {
     input.value = input.value.slice(0, -1);
   }
-
-  clearTimeout(idTimeout);
-  idTimeout = setTimeout(() => {
-    if (input.value.length > 0 && input.value.length < 3) {
-      input.value = input.value.padStart(3, "0");
-    } else if (input.value.length > 3 && input.value.length < 8) {
-      input.value = input.value.padStart(8, "0");
-    }
-  }, 1000);
 }
 
 function removetablerow(row, element) {
