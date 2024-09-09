@@ -60,18 +60,18 @@ document.addEventListener("DOMContentLoaded", function () {
       newPlot.classList.add("plots-main-graph-inner-cnt");
       newPlot.id = `${++count}`;
       newPlot.innerHTML = `
-                <div class="plots-main-graph-inner-comment-cnt">
-                    <p>${plotData.comment}</p>
-                </div>
-                <div class="plots-main-graph-inner-graph-cnt">
-                    <div class="card-body graph-main-cnt">
-                        <canvas id="myChart${plotData.orbId}" class='mychart'></canvas>
-                    </div>
-                    <div class="plots-main-graph-inner-graph-edit-cnt">
-                        <button onclick="removeplot('${count}')">Close</button>
-                    </div>
-                </div>
-            `;
+        <div class="plots-main-graph-inner-comment-cnt">
+            <p>${plotData.comment}</p>
+        </div>
+        <div class="plots-main-graph-inner-graph-cnt">
+            <div class="card-body graph-main-cnt">
+                <canvas id="myChart${plotData.orbId}" class='mychart'></canvas>
+            </div>
+            <div class="plots-main-graph-inner-graph-edit-cnt">
+                <button onclick="removeplot('${count}')">Close</button>
+            </div>
+        </div>
+      `;
       closePopup();
       document.querySelector(".plots-main-graph-main-cnt").appendChild(newPlot);
       callChart(plotData.orbId);
@@ -88,12 +88,16 @@ document.addEventListener("DOMContentLoaded", function () {
 
   function callChart(id) {
     const ctx = document.getElementById(`myChart${id}`).getContext("2d");
+
     const down = (ctx) =>
       ctx.p0.parsed.y > ctx.p1.parsed.y ? "rgb(192, 57, 43)" : undefined;
     const up = (ctx) =>
       ctx.p0.parsed.y < ctx.p1.parsed.y ? "rgb(22, 160, 133)" : undefined;
     const stagnate = (ctx) =>
       ctx.p0.parsed.y === ctx.p1.parsed.y ? "rgb(149, 165, 166)" : undefined;
+
+    const plotData = plotsData.find((plot) => plot.orbId === id);
+    if (!plotData) return;
 
     const data = {
       labels: [],
@@ -141,19 +145,23 @@ document.addEventListener("DOMContentLoaded", function () {
     }
 
     window.electron.onCANData((data) => {
-      const receivedData = data?.decimalData;
-      const receivedId = receivedData.split(" ")[1];
-
+      const receivedData = data?.binaryData;
+      const receivedId = receivedData?.split(" ")[1];
       if (!receivedId || !receivedData) {
         console.log("Invalid data received");
         return;
       }
 
       if (receivedId === id) {
-        const value = addingValue(receivedId);
-        if (value) {
-          updateChart(value);
-        }
+        const processedValue = processCANMessage(
+          receivedData,
+          plotData.startBit,
+          plotData.length,
+          plotData.offset,
+          plotData.scaling,
+          plotData.byteOrder
+        );
+        updateChart(processedValue);
       }
     });
   }
@@ -186,6 +194,13 @@ document.addEventListener("DOMContentLoaded", function () {
   function addValue() {
     const newOrbId = document.getElementById("new-orbId").value;
     const comment = document.getElementById("add-plot-comment-data").value;
+    const offset = parseFloat(document.getElementById("Offset-input").value);
+    const scaling = parseFloat(document.getElementById("scaling-input").value);
+    const byteOrder = document.getElementById("byte-number-select").value;
+    const lengthOfData = parseInt(
+      document.getElementById("length-of-data").value
+    );
+    const startBit = parseInt(document.getElementById("Start-bit").value);
 
     if (newOrbId.trim() === "") {
       alert("Please enter a valid orbId.");
@@ -197,10 +212,19 @@ document.addEventListener("DOMContentLoaded", function () {
     } else if (newOrbId.length > 3 && newOrbId.length < 8) {
       paddedOrbId = newOrbId.padStart(8, "0");
     }
+    plotsData.push({
+      orbId: paddedOrbId,
+      comment: comment,
+      offset: offset,
+      scaling: scaling,
+      byteOrder: byteOrder,
+      length: lengthOfData,
+      startBit: startBit,
+    });
 
-    plotsData.push({ orbId: paddedOrbId, comment: comment });
     populateSelect();
     document.getElementById("new-orbId").value = "";
+
     closePopup();
   }
 
@@ -211,22 +235,56 @@ document.addEventListener("DOMContentLoaded", function () {
     }
   }
 
+  function processCANMessage(
+    canMessage,
+    startBit,
+    length,
+    offset,
+    scaling,
+    byteOrder
+  ) {
+    const binaryData = canMessage.split(" ").slice(3).join("");
+
+    if (!/^[01]+$/.test(binaryData)) {
+      throw new Error("Invalid binary data. Must be a string of 0s and 1s.");
+    }
+
+    if (startBit < 0 || length <= 0 || startBit + length > binaryData.length) {
+      throw new Error("Invalid startBit or length.");
+    }
+    let extractedBits = binaryData.slice(startBit, startBit + length);
+    if (byteOrder === "little-endian") {
+      let bytes = [];
+      for (let i = 0; i < extractedBits.length; i += 8) {
+        bytes.push(extractedBits.slice(i, i + 8));
+      }
+      bytes.reverse();
+      extractedBits = bytes.join("");
+    }
+    let decimalValue = parseInt(extractedBits, 2);
+
+    decimalValue = (decimalValue + offset) * scaling;
+
+    return decimalValue;
+  }
+
   window.electron.onCANData((data) => {
     if (!isRunning) return;
 
-    const newValue = data?.decimalData;
-    const id = data?.decimalData.split(" ")[1];
+    const receivedData = data?.binaryData;
+    const id = receivedData?.split(" ")[1];
+    const value = processCANMessage(receivedData, 0, 0, 0, 1, "big-endian");
 
-    if (!id || !newValue) {
+    if (!id || !value) {
       console.log("Invalid data received");
       return;
     }
     const index = graphData.findIndex((item) => item.split(" ")[1] === id);
 
     if (index !== -1) {
-      graphData[index] = newValue;
+      graphData[index] = value;
     } else {
-      graphData.push(newValue);
+      graphData.push(value);
     }
 
     if (graphData.length > 60) {
@@ -266,7 +324,7 @@ document.addEventListener("DOMContentLoaded", function () {
           }
         });
       }
-    }, 1000); // 1000 ms
+    }, 1000); // Update every second
   }
 });
 

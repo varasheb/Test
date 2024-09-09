@@ -50,6 +50,7 @@
           <div class="addplot-input-cnt">
             <span>Start bit :</span>
             <input
+              id="Start-bit"
               type="number"
               oninput="validateStartBit(this)"
               maxlength="2"
@@ -57,40 +58,29 @@
           </div>
           <div class="addplot-input-cnt">
             <span>length of data</span>
-            <!-- <select id="number-select" name="number">
-                        <option value="4">4</option>
-                        <option value="6">6</option>
-                        <option value="8">8</option>
-                    </select> -->
-            <input type="number" oninput="validateLength(this)" maxlength="2" />
+
+            <input
+              id="length-of-data"
+              type="number"
+              oninput="validateLength(this)"
+              maxlength="2"
+            />
           </div>
           <div class="addplot-input-cnt">
             <span>Endianess (byte Order)</span>
-            <select id="number-select" name="number">
-              <option value="bid endian">Big Endian/Intel</option>
-              <option value="little endian">Little Endian/Motorola</option>
+            <select id="byte-number-select" name="number">
+              <option value="big-endian">Big Endian/Intel</option>
+              <option value="little-endian">Little Endian/Motorola</option>
             </select>
           </div>
           <div class="addplot-input-cnt">
             <span>scaling </span>
-            <input type="text" />
+            <input id="scaling-input" type="text" />
           </div>
           <div class="addplot-input-cnt">
             <span>Offset</span>
-            <input type="text" />
+            <input id="Offset-input" type="text" />
           </div>
-          <!-- <div class="addplot-input-cnt">
-            <span>Interval</span>
-            <input
-              type="text"
-              id="plot-interval"
-              placeholder="More than 1000ms"
-            />
-          </div> -->
-          <!-- <div class="addplot-input-cnt">
-                    <span>comment</span>
-                    <input type="text" id="add-plot-comment-data" placeholder="Add Coment">
-                </div> -->
           <div class="addplot-btn-cnt">
             <button id="plots-add-btn1">Add Plot</button>
           </div>

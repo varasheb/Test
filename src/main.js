@@ -101,7 +101,7 @@ ipcMain.on("stop-Obd2-request", (event, data) => {
 
 ipcMain.on("send-baurdRate", (event, baudRate) => {
   const bitrate = baudRate + "000";
-  setupCAN(bitrate);
+  // setupCAN(bitrate);
   console.log("Set Bit rate", bitrate);
 });
 //======================================================
