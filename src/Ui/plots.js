@@ -28,6 +28,8 @@ document.addEventListener("DOMContentLoaded", function () {
         chartInstance.update();
       }
     });
+
+    setupChartUpdateInterval();
   });
 
   freezeButton.addEventListener("click", () => {
@@ -83,6 +85,7 @@ document.addEventListener("DOMContentLoaded", function () {
   function closePopup() {
     popup.style.visibility = "hidden";
   }
+
   function callChart(id) {
     const ctx = document.getElementById(`myChart${id}`).getContext("2d");
     const down = (ctx) =>
@@ -237,6 +240,34 @@ document.addEventListener("DOMContentLoaded", function () {
   document
     .getElementById("plots-data-select")
     .addEventListener("change", handleSelectChange);
+
+  function setupChartUpdateInterval() {
+    setInterval(() => {
+      if (isRunning) {
+        const chartContainers = document.querySelectorAll(".mychart");
+
+        chartContainers.forEach((chartContainer) => {
+          const ctx = chartContainer.getContext("2d");
+          const chartInstance = Chart.getChart(ctx);
+          if (chartInstance) {
+            const plotId = chartInstance.options.title.text;
+            const value = addingValue(plotId);
+            if (value) {
+              const now = new Date();
+              const timeStr = `${now.getHours()}:${now.getMinutes()}:${now.getSeconds()}`;
+              if (chartInstance.data.labels.length >= 60) {
+                chartInstance.data.labels.shift();
+                chartInstance.data.datasets[0].data.shift();
+              }
+              chartInstance.data.labels.push(timeStr);
+              chartInstance.data.datasets[0].data.push(value);
+              chartInstance.update();
+            }
+          }
+        });
+      }
+    }, 1000); // 1000 ms
+  }
 });
 
 function validateLength(input) {

@@ -1,42 +1,45 @@
-# electron-quick-start
+# OBD-II Data Analysis Electron App
 
-**Clone and run for a quick way to see Electron in action.**
+## Overview
 
-This is a minimal Electron application based on the [Quick Start Guide](https://electronjs.org/docs/latest/tutorial/quick-start) within the Electron documentation.
+This Electron-based desktop application provides a user-friendly interface for analyzing OBD-II data from vehicles. It supports live data visualization, graph plotting, and detailed raw data analysis from CAN (Controller Area Network) bus communication, allowing users to gain insights into vehicle diagnostics and performance.
 
-A basic Electron application needs just these files:
+The app is built using [Electron](https://www.electronjs.org/), and integrates with `can-utils` to interact with vehicle CAN bus data. It is designed for automotive engineers, data analysts, and hobbyists interested in vehicle diagnostics.
 
-- `package.json` - Points to the app's main file and lists its details and dependencies.
-- `main.js` - Starts the app and creates a browser window to render HTML. This is the app's **main process**.
-- `index.html` - A web page to render. This is the app's **renderer process**.
-- `preload.js` - A content script that runs before the renderer process loads.
+---
 
-You can learn more about each of these components in depth within the [Tutorial](https://electronjs.org/docs/latest/tutorial/tutorial-prerequisites).
+## Features
 
-## To Use
+- **OBD-II Data Analysis**: Connect to an OBD-II compatible device and retrieve diagnostic data.
+- **Real-Time Graph Plotting**: Visualize live data such as RPM, speed, fuel levels, and more.
+- **Raw Data Capture**: Capture and decode raw CAN bus data for detailed analysis.
+- **Customizable Graphs**: Customize data plots with different axes, time frames, and filters.
+- **Data Export**: Save raw and processed data to CSV format for offline analysis.
+- **Platform Support**: Cross-platform support for Windows, Linux (Ubuntu), and macOS.
 
-To clone and run this repository you'll need [Git](https://git-scm.com) and [Node.js](https://nodejs.org/en/download/) (which comes with [npm](http://npmjs.com)) installed on your computer. From your command line:
+---
+
+## Requirements
+
+### Hardware:
+
+- OBD-II device that supports CAN bus communication.
+- PCAN USB adapters or compatible hardware.
+
+### Software:
+
+- **Node.js** (>= 14.x)
+- **Electron** (>= 13.x)
+- **can-utils**: Required for CAN communication on Linux systems.
+- **Python 3** (optional): Required for advanced data analysis features.
+
+---
+
+## Installation
+
+### Step 1: Clone the Repository
 
 ```bash
-# Clone this repository
-git clone https://github.com/electron/electron-quick-start
-# Go into the repository
-cd electron-quick-start
-# Install dependencies
-npm install
-# Run the app
-npm start
+git clone https://github.com/varasheb/Test.git
+cd obd2-electron-app
 ```
-
-Note: If you're using Linux Bash for Windows, [see this guide](https://www.howtogeek.com/261575/how-to-run-graphical-linux-desktop-applications-from-windows-10s-bash-shell/) or use `node` from the command prompt.
-
-## Resources for Learning Electron
-
-- [electronjs.org/docs](https://electronjs.org/docs) - all of Electron's documentation
-- [Electron Fiddle](https://electronjs.org/fiddle) - Electron Fiddle, an app to test small Electron experiments
-
-## License
-
-[CC0 1.0 (Public Domain)](LICENSE.md)
-# Test
-# Test
