@@ -37,8 +37,6 @@ document.addEventListener("DOMContentLoaded", function () {
         chartInstance.update();
       }
     });
-
-    setupChartUpdateInterval();
   });
 
   freezeButton.addEventListener("click", () => {
@@ -62,9 +60,7 @@ document.addEventListener("DOMContentLoaded", function () {
   };
 
   function addNewPlot(data) {
-    // const plotData = plotsData.find((plot) => plot.id === id);
     if (data) {
-      // const comment = document.getElementById("add-plot-comment-data");
       const newPlot = document.createElement("div");
       newPlot.classList.add("plots-main-graph-inner-cnt");
       newPlot.id = `${++count}`;
@@ -77,7 +73,7 @@ document.addEventListener("DOMContentLoaded", function () {
                 <canvas id="myChart${data.id}${data.orbId}" class='mychart'></canvas>
             </div>
             <div class="plots-main-graph-inner-graph-edit-cnt">
-                <button onclick="removeplot('${count}')">Close</button>
+                <button style= " margin-left: 20px; width : 33px; margin-top: -3px;" onclick="removeplot('${count}')">❌</button>
             </div>
         </div>
       `;
@@ -86,7 +82,6 @@ document.addEventListener("DOMContentLoaded", function () {
       callChart(data);
     }
   }
-
   function openPopup() {
     popup.style.visibility = "visible";
   }
@@ -142,9 +137,7 @@ document.addEventListener("DOMContentLoaded", function () {
       const intervalID = setInterval(updateChart, 1000);
     }
     setAllIntervals();
-    // function updateChart() {
-    //   console.log(incomingData);
-    // }
+
     function updateChart() {
       if (!isRunning) return;
       const id = newData.orbId;
@@ -176,38 +169,7 @@ document.addEventListener("DOMContentLoaded", function () {
         myChart.update();
       }
     }
-
-    // window.electron.onCANData((data) => {
-    //   const receivedData = data?.binaryData;
-    //   const receivedId = receivedData?.split(" ")[1];
-    //   if (!receivedId || !receivedData) {
-    //     console.log("Invalid data received");
-    //     return;
-    //   }
-
-    //   if (receivedId === id) {
-    //     const processedValue = processCANMessage(
-    //       receivedData,
-    //       plotData.startBit,
-    //       plotData.length,
-    //       plotData.offset,
-    //       plotData.scaling,
-    //       plotData.byteOrder
-    //     );
-    //     updateChart(processedValue);
-    //   }
-    // });
   }
-
-  function addingValue(id) {
-    const data = graphData.find((item) => item.split(" ")[1] === id);
-    if (data) {
-      return data.split(" ")[3];
-    } else {
-      return 0;
-    }
-  }
-
   function populateSelect() {
     const selectElement = document.getElementById("plots-data-select");
     selectElement.innerHTML = "";
@@ -290,7 +252,7 @@ document.addEventListener("DOMContentLoaded", function () {
     if (startBit < 0 || length <= 0 || startBit + length > binaryData.length) {
       throw new Error("Invalid startBit or length.");
     }
-    let extractedBits = binaryData.slice(startBit, startBit + length);
+    let extractedBits = binaryData.slice(startBit + 1, startBit + length + 1);
     if (byteOrder === "little-endian") {
       let bytes = [];
       for (let i = 0; i < extractedBits.length; i += 8) {
@@ -308,33 +270,9 @@ document.addEventListener("DOMContentLoaded", function () {
 
   let incomingData = {};
   window.electron.onCANData((data) => {
-    // if (!isRunning) return;
     const receivedData = data?.binaryData;
     const id = receivedData?.split(" ")[1];
     incomingData[id] = data;
-    // console.log(incomingData);
-
-    // const receivedData = data?.binaryData;
-    // const id = receivedData?.split(" ")[1];
-    // const value = processCANMessage(receivedData, 0, 0, 0, 1, "big-endian");
-
-    // if (!id || !value) {
-    //   console.log("Invalid data received");
-    //   return;
-    // }
-    // const index = graphData.findIndex((item) => item.split(" ")[1] === id);
-
-    // if (index !== -1) {
-    //   graphData[index] = value;
-    // } else {
-    //   graphData.push(value);
-    // }
-
-    // if (graphData.length > 60) {
-    //   graphData.shift();
-    // }
-
-    // console.log(graphData);
   });
 
   populateSelect();
@@ -346,34 +284,6 @@ document.addEventListener("DOMContentLoaded", function () {
 
       handleSelectChange(value.value);
     });
-
-  function setupChartUpdateInterval() {
-    setInterval(() => {
-      if (isRunning) {
-        const chartContainers = document.querySelectorAll(".mychart");
-
-        chartContainers.forEach((chartContainer) => {
-          const ctx = chartContainer.getContext("2d");
-          const chartInstance = Chart.getChart(ctx);
-          if (chartInstance) {
-            // const plotId = chartInstance.options.title.text;
-            const value = addingValue(plotId);
-            if (value) {
-              const now = new Date();
-              const timeStr = `${now.getHours()}:${now.getMinutes()}:${now.getSeconds()}`;
-              if (chartInstance.data.labels.length >= 60) {
-                chartInstance.data.labels.shift();
-                chartInstance.data.datasets[0].data.shift();
-              }
-              chartInstance.data.labels.push(timeStr);
-              chartInstance.data.datasets[0].data.push(value);
-              chartInstance.update();
-            }
-          }
-        });
-      }
-    }, 1000); // Update every second
-  }
 });
 
 function validateLength(input) {
