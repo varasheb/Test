@@ -106,7 +106,8 @@ document.addEventListener("DOMContentLoaded", function () {
       newRow.insertCell(1).textContent = rawData.length;
       newRow.insertCell(2).textContent = rawData.data.join(" ");
       newRow.insertCell(3).textContent = rawData.cyclicTime;
-      const removeCell = newRow.insertCell(4);
+      newRow.insertCell(4).textContent = 0;
+      const removeCell = newRow.insertCell(5);
       removeCell.innerHTML = `<p onclick="removetablerow('${newRow.id}', this)">❌</p>`;
       const newRowData = {
         rowId: newRow.id,
@@ -162,6 +163,7 @@ document.addEventListener("DOMContentLoaded", function () {
 });
 
 //----------
+
 function updateReceiverTable(data) {
   const tableBody = document.getElementById("receiver-table-body");
   const typeOfResponse = document.getElementById("number-type-output").value;
@@ -213,7 +215,6 @@ function updateReceiverTable(data) {
       existingValueCell.innerHTML = changedPart;
     }
   } else {
-    // Create new row
     const newRow = document.createElement("tr");
     newRow.id = rowId;
 
@@ -265,9 +266,25 @@ function getChangedPart(oldValue, newValue) {
   }
   return html;
 }
+function checkDataWithTable(arbId) {
+  const rows = document.querySelectorAll("#data-table-body tr");
+
+  for (let row of rows) {
+    const idCell = row.querySelector("td:first-child");
+    const countCell = row.querySelector("td:nth-child(5)");
+
+    if (idCell && idCell.textContent.trim() === arbId) {
+      let count = parseInt(countCell.textContent) || 0;
+      countCell.textContent = count + 1;
+      return false;
+    }
+  }
+  return true;
+}
 
 window.electron.onCANData((data) => {
-  updateReceiverTable(data);
+  const arbId = data?.decimalData.split(" ")[1];
+  if (checkDataWithTable(arbId)) updateReceiverTable(data);
 });
 
 window.electron.onCANerror((data) => {
@@ -307,10 +324,17 @@ document
   .querySelector(".rawdata-refresh-btn")
   .addEventListener("click", function () {
     console.log("refresh button is clicked");
-    const allCounts = document.querySelectorAll(
-      " #receiver-table-body .count-class"
+
+    const transferCounts = document.querySelectorAll(
+      "#data-table-body td:nth-child(5)"
     );
-    allCounts.forEach(function (ele) {
+    transferCounts.forEach(function (ele) {
+      ele.textContent = "0";
+    });
+    const receiverCounts = document.querySelectorAll(
+      "#receiver-table-body .count-class"
+    );
+    receiverCounts.forEach(function (ele) {
       ele.textContent = "0";
     });
   });
