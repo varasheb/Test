@@ -3,6 +3,7 @@ document.addEventListener("DOMContentLoaded", function () {
   let isRunning = true;
   const plotsData = [];
   let graphData = [];
+  const dataBuffer = []; // Buffer for incoming CAN data
   const btn = document.getElementById("plots-add-btn");
   const popup = document.getElementById("popup");
   const addPlot = document.getElementById("plots-add-btn1");
@@ -16,7 +17,7 @@ document.addEventListener("DOMContentLoaded", function () {
     isRunning = true;
     console.log("Graph updates resumed.");
 
-    graphData = [];
+    // Reset graphs
     const chartContainers = document.querySelectorAll(".mychart");
 
     chartContainers.forEach((chartContainer) => {
@@ -83,6 +84,7 @@ document.addEventListener("DOMContentLoaded", function () {
   function closePopup() {
     popup.style.visibility = "hidden";
   }
+
   function callChart(id) {
     const ctx = document.getElementById(`myChart${id}`).getContext("2d");
     const down = (ctx) =>
@@ -147,18 +149,55 @@ document.addEventListener("DOMContentLoaded", function () {
       }
 
       if (receivedId === id) {
-        const value = addingValue(receivedId);
-        if (value) {
-          updateChart(value);
-        }
+        dataBuffer.push(receivedData);
       }
     });
+
+    async function updateGraph() {
+      if (!isRunning) return;
+
+      if (dataBuffer.length === 0) return;
+
+      // Process the buffered data
+      const valuesToUpdate = {};
+      dataBuffer.forEach((data) => {
+        const id = data.split(" ")[1];
+        const value = addingValue(id);
+        if (value) {
+          if (!valuesToUpdate[id]) valuesToUpdate[id] = [];
+          valuesToUpdate[id].push(value);
+        }
+      });
+      dataBuffer.length = 0; // Clear the buffer
+
+      // Update charts
+      Object.keys(valuesToUpdate).forEach((id) => {
+        const averageValue =
+          valuesToUpdate[id].reduce((a, b) => a + b, 0) /
+          valuesToUpdate[id].length;
+        updateChartForId(id, averageValue);
+      });
+    }
+
+    function updateChartForId(id, value) {
+      const chartContainers = document.querySelectorAll(`#myChart${id}`);
+      chartContainers.forEach((chartContainer) => {
+        const ctx = chartContainer.getContext("2d");
+        const chartInstance = Chart.getChart(ctx);
+        if (chartInstance) {
+          updateChart(value);
+        }
+      });
+    }
+
+    // Call updateGraph every second
+    setInterval(updateGraph, 1000);
   }
 
   function addingValue(id) {
     const data = graphData.find((item) => item.split(" ")[1] === id);
     if (data) {
-      return data.split(" ")[3];
+      return parseFloat(data.split(" ")[3]);
     } else {
       return 0;
     }
