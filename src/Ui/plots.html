@@ -45,7 +45,8 @@
           </div>
           <div class="addplot-input-cnt">
             <span>Arbitration ID</span>
-            <input type="text" id="new-orbId" />
+            <!-- <input type="text" id="new-orbId" /> -->
+            <select name="orbitid" id="select-orbitId"></select>
           </div>
           <div class="addplot-input-cnt">
             <span>Start bit :</span>
@@ -82,7 +83,7 @@
             <input id="Offset-input" type="text" />
           </div>
           <div class="addplot-btn-cnt">
-            <button id="plots-add-btn1">Add Plot</button>
+            <button id="plots-add-btn1" onclick="callme()">Add Plot</button>
           </div>
         </div>
       </div>

@@ -1,26 +1,23 @@
+const plotsData = [];
+const orbitIdData = [];
 document.addEventListener("DOMContentLoaded", function () {
   let count = 0;
-  let idCount = 0;
-  function getplotId() {
-    if (idCount == 0) {
-      idCount++;
-      return 0;
-    }
-    return idCount++;
-  }
 
   let isRunning = true;
-  const plotsData = [];
   let graphData = [];
   const btn = document.getElementById("plots-add-btn");
+  if (!btn) {
+    return;
+  }
   const popup = document.getElementById("popup");
   const addPlot = document.getElementById("plots-add-btn1");
   const startButton = document.getElementById("plots-start");
   const freezeButton = document.getElementById("plots-freez");
 
-  addPlot.addEventListener("click", addValue);
+  // addPlot.addEventListener("click", addValue);
   btn.addEventListener("click", openPopup);
-
+  populateSelect();
+  populateOrbIdSelect();
   startButton.addEventListener("click", () => {
     isRunning = true;
     console.log("Graph updates resumed.");
@@ -170,21 +167,6 @@ document.addEventListener("DOMContentLoaded", function () {
       }
     }
   }
-  function populateSelect() {
-    const selectElement = document.getElementById("plots-data-select");
-    selectElement.innerHTML = "";
-    const defaultOption = document.createElement("option");
-    defaultOption.value = "";
-    defaultOption.textContent = "Select the plot";
-    selectElement.appendChild(defaultOption);
-
-    plotsData.forEach((plot) => {
-      const option = document.createElement("option");
-      option.value = plot.id;
-      option.textContent = `${plot.comment}(${plot.orbId})`;
-      selectElement.appendChild(option);
-    });
-  }
 
   function addValue() {
     const newOrbId = document.getElementById("new-orbId").value;
@@ -273,6 +255,11 @@ document.addEventListener("DOMContentLoaded", function () {
     const receivedData = data?.binaryData;
     const id = receivedData?.split(" ")[1];
     incomingData[id] = data;
+    const orbIdValue = orbitIdData.find((value) => value === id);
+    if (!orbIdValue) {
+      orbitIdData.push(id);
+      populateOrbIdSelect();
+    }
   });
 
   populateSelect();
@@ -341,4 +328,93 @@ function processCANMessage(
   let decimalValue = parseInt(extractedBits, 2);
   decimalValue = (decimalValue + offset) * scaling;
   return decimalValue;
+}
+
+function callme(data) {
+  const loaclData = JSON.parse(localStorage.getItem("plotsData")) || [];
+  let newOrbId = null;
+  if (data === "plotsdata") {
+    newOrbId = document.getElementById("select-orbitId").value;
+  } else {
+    newOrbId = document.getElementById("new-orbId").value;
+  }
+  const comment = document.getElementById("add-plot-comment-data").value;
+  const offset = parseFloat(document.getElementById("Offset-input").value);
+  const scaling = parseFloat(document.getElementById("scaling-input").value);
+  const byteOrder = document.getElementById("byte-number-select").value;
+  const lengthOfData = parseInt(
+    document.getElementById("length-of-data").value
+  );
+  const startBit = parseInt(document.getElementById("Start-bit").value);
+
+  if (newOrbId.trim() === "") {
+    alert("Please enter a valid orbId.");
+    return;
+  }
+  let paddedOrbId = newOrbId;
+  if (newOrbId.length < 3) {
+    paddedOrbId = newOrbId.padStart(3, "0");
+  } else if (newOrbId.length > 3 && newOrbId.length < 8) {
+    paddedOrbId = newOrbId.padStart(8, "0");
+  }
+
+  loaclData.push({
+    orbId: paddedOrbId,
+    comment: comment,
+    offset: offset,
+    scaling: scaling,
+    byteOrder: byteOrder,
+    length: lengthOfData,
+    startBit: startBit,
+  });
+  localStorage.setItem("plotsData", JSON.stringify(loaclData));
+  let plotpopup = document.getElementById("plotpopup");
+  if (plotpopup) {
+    plotpopup.style.visibility = "hidden";
+  }
+  const popup = document.getElementById("popup");
+  if (popup) {
+    popup.style.visibility = "hidden";
+  }
+  populateSelect();
+}
+
+function populateSelect() {
+  const selectElement = document.getElementById("plots-data-select");
+  if (selectElement) {
+    selectElement.innerHTML = "";
+    const defaultOption = document.createElement("option");
+    defaultOption.value = "";
+    defaultOption.textContent = "Select the plot";
+    selectElement.appendChild(defaultOption);
+    const newPlotsData = JSON.parse(localStorage.getItem("plotsData"));
+    if (newPlotsData) {
+      newPlotsData.forEach((plot, index) => {
+        const option = document.createElement("option");
+        option.value = index;
+        option.textContent = `${plot.comment} (${plot.orbId})`;
+        selectElement.appendChild(option);
+        plotsData.push({
+          id: index,
+          ...plot,
+        });
+      });
+    }
+  }
+}
+function populateOrbIdSelect() {
+  const selectElement = document.getElementById("select-orbitId");
+  selectElement.innerHTML = "";
+  const defaultOption = document.createElement("option");
+  defaultOption.value = "";
+  defaultOption.textContent = "Select the orbId";
+  selectElement.appendChild(defaultOption);
+  if (orbitIdData) {
+    orbitIdData.forEach((plot) => {
+      const option = document.createElement("option");
+      option.value = parseInt(plot);
+      option.textContent = plot;
+      selectElement.appendChild(option);
+    });
+  }
 }

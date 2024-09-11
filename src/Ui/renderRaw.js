@@ -50,6 +50,8 @@ document.addEventListener("DOMContentLoaded", function () {
   function closePopup() {
     popup.style.visibility = "hidden";
   }
+  // if (addplot.addEventListener("click", addPlotToLocal)) {
+  // // }
 
   addRequestBtn.addEventListener("click", function () {
     editingRow = null;
@@ -116,6 +118,7 @@ document.addEventListener("DOMContentLoaded", function () {
         hexdata: rawData.data.join(" "),
         cyclicTime: rawData.cyclicTime,
       };
+
       storeOrUpdateTransferRow(newRow.id, newRowData);
       startCycle(rawData);
       newRow.cells[2].addEventListener("click", () => {
@@ -250,6 +253,11 @@ function updateReceiverTable(data) {
     countCell.id = `receive-data-count-value-${id}${idOfResponse}`;
     newRow.appendChild(countCell);
 
+    const plotCell = document.createElement("td");
+    plotCell.innerHTML = ` <button id="plots-add-btn" onclick="popupcontainer('${rowId}')">+
+      </button>`;
+    newRow.appendChild(plotCell);
+
     tableBody.appendChild(newRow);
   }
 }
@@ -287,6 +295,8 @@ function checkDataWithTable(arbId) {
 }
 
 window.electron.onCANData((data) => {
+  console.log(data);
+
   const arbId = data?.decimalData.split(" ")[1];
   if (checkDataWithTable(arbId)) updateReceiverTable(data);
 });
@@ -363,4 +373,50 @@ function unfreezData() {
     console.log(data);
     window.electron.sendRowNumberEditing(data);
   });
+}
+
+function popupcontainer(id) {
+  let plotData = document.getElementById(id);
+  // console.log(plotData);
+  let plotpopup = document.getElementById("plotpopup");
+  // const plotpopup = document.querySelector(".rawdata-user-popup1-main-cnt");
+  let idValue = document.getElementById("new-orbId");
+  idValue.value = plotData.cells[1].textContent;
+
+  openPlotpopUp();
+  window.addEventListener("click", function (event) {
+    if (event.target === plotpopup) {
+      closePlotpopUp();
+    }
+  });
+  function openPlotpopUp() {
+    plotpopup.style.visibility = "visible";
+  }
+
+  function closePlotpopUp() {
+    plotpopup.style.visibility = "hidden";
+  }
+}
+
+function validateLength(input) {
+  const value = input.value;
+  if (value < 0) {
+    input.value = "";
+  }
+
+  if (value > 31) {
+    input.value = "";
+  }
+}
+
+function validateStartBit(input) {
+  const value = input.value;
+  if (value < 0) {
+    input.value = "";
+  }
+
+  if (value > 63) {
+    input.value = "";
+  }
+  8;
 }

@@ -27,6 +27,7 @@ app.whenReady().then(createWindow);
 
 app.on("window-all-closed", () => {
   if (process.platform !== "darwin") {
+    localStorage.removeItem("plotsData");
     app.quit();
   }
 });
@@ -106,8 +107,8 @@ ipcMain.on("send-baurdRate", (event, baudRate) => {
 });
 //======================================================
 
-const canChannel = "can0";
-// const canChannel = "vcan0";
+// const canChannel = "can0";
+const canChannel = "vcan0";
 const candump = spawn("candump", [canChannel]);
 
 candump.stdout.on("data", (data) => {
