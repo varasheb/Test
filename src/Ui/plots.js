@@ -109,7 +109,7 @@ document.addEventListener("DOMContentLoaded", function () {
       labels: [],
       datasets: [
         {
-          label: newData.comment,
+          label: newData.orbId,
           data: [],
           borderWidth: 2,
           lineTension: 0.5,
