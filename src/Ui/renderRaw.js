@@ -170,10 +170,14 @@ function updateReceiverTable(data) {
   let value = null;
 
   const { id, timeStamp, binaryData, decimalData, rawData } = data;
-  console.log("-->", data);
 
-  const idOfResponse = rawData.split("  ")[2];
-  const rowId = `new-row-receive-${id}${idOfResponse}`;
+  let idOfResponse = rawData.split("  ")[2];
+  let dlc = rawData.split("  ")[3];
+  if (idOfResponse === "") idOfResponse = rawData.split("  ")[4];
+  if (dlc === "") dlc = rawData.split("  ")[5];
+  console.log("00000000000000000000", rawData.split("  "));
+
+  const rowId = idOfResponse;
   let existingRow = document.getElementById(rowId);
   let timeDifference = null;
 
@@ -205,7 +209,7 @@ function updateReceiverTable(data) {
       : value;
 
     existingRow.cells[0].textContent = timeStamp;
-    existingRow.cells[2].textContent = rawData.split("  ")[3];
+    existingRow.cells[2].textContent = dlc;
     existingRow.cells[4].textContent = `${timeDifference} ms`;
     existingRow.cells[5].textContent =
       parseInt(existingRow.cells[5].textContent, 10) + 1;
@@ -227,7 +231,7 @@ function updateReceiverTable(data) {
     newRow.appendChild(idCell);
 
     const lengthCell = document.createElement("td");
-    lengthCell.textContent = rawData.split("  ")[3];
+    lengthCell.textContent = dlc;
     newRow.appendChild(lengthCell);
 
     const dataCell = document.createElement("td");
