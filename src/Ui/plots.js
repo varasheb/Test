@@ -106,7 +106,7 @@ document.addEventListener("DOMContentLoaded", function () {
       labels: [],
       datasets: [
         {
-          label: newData.comment,
+          label: newData.orbId,
           data: [],
           borderWidth: 2,
           lineTension: 0.5,
@@ -155,7 +155,7 @@ document.addEventListener("DOMContentLoaded", function () {
         const now = new Date();
         const timeStr = `${now.getHours()}:${now.getMinutes()}:${now.getSeconds()}`;
 
-        if (data.labels.length >= 60) {
+        if (data.labels.length >= 15) {
           data.labels.shift();
           data.datasets[0].data.shift();
         }
